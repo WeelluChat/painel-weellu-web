@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:monitor_site_weellu/rotas/provider2.dart';
+import 'package:monitor_site_weellu/screens/bussines/business.dart';
 import 'package:window_manager/window_manager.dart'; // Use esta biblioteca
 import 'package:provider/provider.dart';
 import 'login/login_page.dart';
@@ -24,6 +25,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        // ChangeNotifierProvider(create: (_) => HeaderIndexManager()),
         ChangeNotifierProvider(
           create: (context) => ProfileProvider(),
         ),

@@ -1,4 +1,6 @@
 import 'package:http/http.dart' as http;
+import 'package:monitor_site_weellu/models/categoria.dart';
+import 'package:monitor_site_weellu/rotas/config.dart';
 import 'dart:convert';
 import '../models/comenters.dart';
 import '../screens/integracao/modelIntegration.dart';
@@ -174,4 +176,89 @@ class ApiService {
       throw Exception('Failed to fetch profile image');
     }
   }
+
+  Future<List<ResponseModel>> fetchCategoriesModel() async {
+    final url = '${Config.apiUrl}admin-panel/category/all';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Accept': 'application/json',
+          'admin-key': 'super_password_for_admin',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // Verifica se os dados retornados contêm a chave "data.docs"
+        if (data is Map<String, dynamic> && data.containsKey('data')) {
+          final List<dynamic> categoryData = data['data']['docs'] ?? [];
+
+          print('Dados recebidos: $categoryData'); // Log detalhado
+          return categoryData
+              .map((json) {
+                try {
+                  return ResponseModel.fromJson(json);
+                } catch (e) {
+                  print('Erro ao parsear item: $json\nErro: $e');
+                  return null;
+                }
+              })
+              .whereType<ResponseModel>()
+              .toList();
+        } else {
+          print('Erro: Estrutura de resposta inesperada.');
+          return [];
+        }
+      } else {
+        print('Erro na requisição: ${response.statusCode}');
+        return [];
+      }
+    } catch (error) {
+      print('Erro ao buscar categorias: $error');
+      return [];
+    }
+  }
+
+  Future<bool> deleteCategory(String idCategoria) async {
+    final response = await http.delete(
+      Uri.parse('${Config.apiUrl}/v1/admin-panel/category/$idCategoria/delete'),
+      headers: {'admin-key': 'super_password_for_admin'},
+    );
+
+    if (response.statusCode == 200) {
+      print('Categoria deletada com sucesso!');
+      return true; // Sucesso na exclusão
+    } else {
+      print(
+          'Erro ao deletar categoria: ${response.statusCode} - ${response.body}');
+      return false; // Falha na exclusão
+    }
+  }
+
+  // Future<void> deleteCategory(String categoryId) async {
+  //   final String url =
+  //       '${Config.apiUrl}admin-panel/category/$categoryId/delete';
+
+  //   try {
+  //     final response = await http.delete(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'admin-key': 'super_password_for_admin',
+  //       },
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       print('Categoria deletada com sucesso!');
+  //       return true; // Sucesso na exclusão
+  //     } else {
+  //       print(
+  //           'Erro ao deletar categoria: ${response.statusCode} - ${response.body}');
+  //     }
+  //   } catch (e) {
+  //     print('Erro na requisição: $e');
+  //   }
+  // }
 }

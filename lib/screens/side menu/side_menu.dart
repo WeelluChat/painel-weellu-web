@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -197,15 +198,6 @@ class _SideMenuState extends State<SideMenu> {
                         _handleMenuItemSelected('Integration');
                       },
                     ),
-                    //                 _buildActionButton(
-                    //   Icons.supervisor_account_rounded,
-                    //   'Integration',
-                    //   scaleFactor: scaleFactor,
-                    //   isSelected: _selectedMenuItem == 'Integration',
-                    //   onPressed: () {
-                    //     _handleMenuItemSelected('Integration');
-                    //   },
-                    // ),
                     _buildActionButton(
                       Icons.sms,
                       'Comentários',
@@ -231,6 +223,15 @@ class _SideMenuState extends State<SideMenu> {
                       isSelected: _selectedMenuItem == 'business',
                       onPressed: () {
                         _handleMenuItemSelected('business');
+                      },
+                    ),
+                    _buildActionButton(
+                      PhosphorIcons.flag_banner_fill,
+                      'Adversiting',
+                      scaleFactor: scaleFactor,
+                      isSelected: _selectedMenuItem == 'Adversiting',
+                      onPressed: () {
+                        _handleMenuItemSelected('Adversiting');
                       },
                     ),
                     _buildActionButton(
@@ -287,7 +288,6 @@ class _SideMenuState extends State<SideMenu> {
                         _handleMenuItemSelected('App Update');
                       },
                     ),
-
                     _buildActionButton(
                       Icons.circle_notifications,
                       "Notifications",
