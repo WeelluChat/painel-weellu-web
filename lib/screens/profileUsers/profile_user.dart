@@ -16,6 +16,7 @@ class ProfileUser extends StatefulWidget {
 class _ProfileUserState extends State<ProfileUser> {
   @override
   Widget build(BuildContext context) {
+    print("id do usuario ${widget.userId}");
     return ScreenUtilInit(
       designSize: const Size(1920, 1080),
       minTextAdapt: true,

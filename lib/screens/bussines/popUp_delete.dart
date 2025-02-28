@@ -128,13 +128,15 @@ class _PopupDeleteState extends State<PopupDelete> {
                       InkWell(
                         onTap: () {
                           dataNotfier.deleteCategory(widget.idCategoria);
-                          dataNotfier.loadData();
-                          Navigator.pop(context);
+
+                          Navigator.pop(context, true);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content:
                                     Text('Categoria excluída com sucesso!')),
                           );
+                          // dataNotfier.loadData();
+                          // dataNotfier.fetchSubcategoriesModel();
                         },
                         // onTap: widget.ontap,
                         child: Container(

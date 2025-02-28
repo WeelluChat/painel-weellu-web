@@ -155,7 +155,7 @@ class _AddcategoriasState extends State<Addsubcategory> {
                             child: TextFormField(
                               controller: _categoriaController,
                               style: TextStyle(
-                                color: Color(0xFF3E3E3E),
+                                color: Color.fromARGB(255, 255, 255, 255),
                                 fontSize: 18.sp,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,

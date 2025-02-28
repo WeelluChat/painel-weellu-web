@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:monitor_site_weellu/models/categoria.dart';
 import 'package:monitor_site_weellu/rotas/apiservice.dart';
 import 'package:monitor_site_weellu/rotas/config.dart';
+import 'package:monitor_site_weellu/screens/bussines/subcategorias.dart';
 
 class DataNotfier extends ValueNotifier<List<ResponseModel>> {
   static final DataNotfier _instance = DataNotfier._internal();
@@ -11,6 +12,7 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
   DataNotfier._internal() : super([]);
 
   List<ResponseModel> _categorias = [];
+
   final ApiService _apiService = ApiService(baseUrl: Config.apiUrlMaster);
 
   void removeCategory(String idCategoria) {
@@ -39,6 +41,60 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
       }
     } catch (e) {
       print('Exceção ao excluir: $e');
+    }
+  }
+
+  Future<List<ResponseModel>> fetchSubcategoriesModel() async {
+    final url = '${Config.apiUrl}admin-panel/category/all';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Accept': 'application/json',
+          'admin-key': 'super_password_for_admin',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data is Map<String, dynamic> && data.containsKey('data')) {
+          final List<dynamic> categoryData = data['data']['docs'] ?? [];
+
+          List<ResponseModel> subcategories = [];
+
+          // Itera sobre todas as categorias principais
+          for (var category in categoryData) {
+            List<dynamic> subcategoryList = category['subcategories'] ?? [];
+
+            // Itera sobre as subcategorias de cada categoria
+            for (var subcategory in subcategoryList) {
+              // Substitui o parentCategoryId pelo nome da categoria principal
+              subcategory['parentCategoryName'] = category['name'];
+              subcategory['parentCategoryId'] =
+                  category['name']; // Substitui ID por nome
+
+              try {
+                subcategories.add(ResponseModel.fromJson(subcategory));
+              } catch (e) {
+                print('Erro ao parsear subcategoria: $subcategory\nErro: $e');
+              }
+            }
+          }
+
+          return subcategories;
+        } else {
+          print('Erro: Estrutura de resposta inesperada.');
+          return [];
+        }
+      } else {
+        print('Erro na requisição: ${response.statusCode}');
+        return [];
+      }
+    } catch (error) {
+      print('Erro ao buscar subcategorias: $error');
+      return [];
     }
   }
 
@@ -155,9 +211,9 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
       if (response.statusCode == 201) {
         // Nova categoria adicionada à lista
         final responseData = jsonDecode(response.body);
-        final newCategory = ResponseModel.fromJson(responseData['data']);
-        _categorias.add(newCategory);
-        value = List.from(_categorias); // Notifica ouvintes sobre a mudança
+        // final newCategory = ResponseModel.fromJson(responseData['data']);
+        // _categorias.add(newCategory);
+        // value = List.from(_categorias); // Notifica ouvintes sobre a mudança
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Subcategoria criada com sucesso!')),
