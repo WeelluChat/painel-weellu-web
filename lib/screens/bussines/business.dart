@@ -216,6 +216,7 @@ class _BusinessState extends State<Business> {
   List<Widget> pages = [
     PageBusines(),
     Bussinespage(),
+    Container(child: Text('Teste'))
   ];
 
   void _onItemSelected(int index) {
@@ -465,11 +466,34 @@ class Categorias extends StatefulWidget {
 class _CategoriasState extends State<Categorias> {
   final DataNotfier dataNotfier = DataNotfier();
   final ApiService _apiService = ApiService(baseUrl: Config.apiUrl);
+  final TextEditingController _searchController = TextEditingController();
+  List<ResponseModel> _filteredCategorias = [];
 
   @override
   void initState() {
     super.initState();
     dataNotfier.loadData();
+    filterCategorias();
+    // Inicializa a lista filtrada com todos os itens
+    _filteredCategorias = List.from(dataNotfier.value);
+
+    _searchController.addListener(filterCategorias);
+  }
+
+  void filterCategorias() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredCategorias = dataNotfier.value
+          .where((categoria) =>
+              categoria.nameCategoria!.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -477,10 +501,6 @@ class _CategoriasState extends State<Categorias> {
     return ValueListenableBuilder<List<ResponseModel>>(
       valueListenable: dataNotfier,
       builder: (context, categorias, child) {
-        // if (categorias.isEmpty) {
-        //   return const Center(child: CircularProgressIndicator());
-        // }
-
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.sp),
           child: Column(
@@ -500,9 +520,22 @@ class _CategoriasState extends State<Categorias> {
                       ),
                     ),
                     child: TextFormField(
+                      controller: _searchController,
+                      style: TextStyle(
+                        color: Color(0xFF7C7C7C),
+                        fontSize: 20.sp,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           prefixIcon: Icon(Icons.search),
+                          hintStyle: TextStyle(
+                            color: Color(0xFF7C7C7C),
+                            fontSize: 20.sp,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
                           hintText: "Pesquisar"),
                     ),
                   ),
@@ -524,14 +557,27 @@ class _CategoriasState extends State<Categorias> {
                     width: 10.sp,
                   ),
                   InkWell(
-                    onTap: () {
-                      showDialog(
+                    onTap: () async {
+                      bool? result = await showDialog(
                         barrierColor: Color.fromARGB(141, 87, 87, 87),
                         context: context,
                         builder: (context) {
                           return Addcategorias();
                         },
                       );
+
+                      if (result == true) {
+                        await dataNotfier
+                            .loadData(); // Aguarde o carregamento dos dados
+
+                        setState(() {
+                          dataNotfier
+                              .loadData(); // Aguarde o carregamento dos dados
+                          _filteredCategorias = List.from(dataNotfier.value);
+                        });
+
+                        filterCategorias(); // Aplica novamente o filtro com os novos dados
+                      }
                     },
                     child: Container(
                       width: 120.sp,
@@ -595,7 +641,7 @@ class _CategoriasState extends State<Categorias> {
                       true, // Faz a lista ocupar apenas o espaço necessário
                   physics:
                       ClampingScrollPhysics(), // Impede o scroll da página quando a lista atinge o final
-                  itemCount: categorias.length,
+                  itemCount: _filteredCategorias.length,
                   itemBuilder: (context, index) {
                     int _hexToColor(String hexColor) {
                       hexColor = hexColor.replaceAll('#', '');
@@ -603,10 +649,11 @@ class _CategoriasState extends State<Categorias> {
                     }
 
                     // Invertendo a ordem dos itens manualmente
-                    final categoria = categorias[categorias.length - 1 - index];
+                    final categoria = _filteredCategorias[
+                        _filteredCategorias.length - 1 - index];
 
                     // Fazendo a contagem reversa
-                    final reverseIndex = categorias.length - index;
+                    final reverseIndex = _filteredCategorias.length - index;
                     print(categoria.colorIcon);
                     return _categoriasTable(
                       categoria: categoria,
@@ -700,8 +747,8 @@ class _CategoriasState extends State<Categorias> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
-                      showDialog(
+                    onTap: () async {
+                      bool? result = await showDialog(
                         context: context,
                         builder: (context) {
                           return Editcategorias(
@@ -710,6 +757,16 @@ class _CategoriasState extends State<Categorias> {
                           );
                         },
                       );
+                      if (result == true) {
+                        await dataNotfier
+                            .loadData(); // Aguarde o carregamento dos dados
+
+                        setState(() {
+                          _filteredCategorias = List.from(dataNotfier.value);
+                        });
+
+                        filterCategorias(); // Aplica novamente o filtro com os novos dados
+                      }
                     },
                     child: Icon(
                       Icons.edit,

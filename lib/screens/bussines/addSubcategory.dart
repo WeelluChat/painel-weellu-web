@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:monitor_site_weellu/popups/pop_up_create_category.dart';
+import 'package:monitor_site_weellu/popups/pop_up_create_subcategory.dart';
 import 'package:monitor_site_weellu/utilitarios/datanotfier.dart';
 import 'package:monitor_site_weellu/utilitarios/icones_phospor.dart';
 
@@ -66,6 +68,7 @@ class _AddcategoriasState extends State<Addsubcategory> {
           title: Text("Selecione uma cor"),
           content: SingleChildScrollView(
             child: ColorPicker(
+              hexInputBar: true,
               pickerColor: tempColor,
               onColorChanged: (color) {
                 tempColor = color;
@@ -93,6 +96,59 @@ class _AddcategoriasState extends State<Addsubcategory> {
       },
     );
   }
+
+//   final Map<String, List<OverlayEntry>> activePopupsMap =
+//       {}; // Associa popups a cada membro
+
+//   void showCustomPopup(
+//     BuildContext context,
+//     String NameCategory,
+//   ) {
+//     OverlayState overlayState = Overlay.of(context)!;
+
+//     late OverlayEntry overlayEntry;
+
+//     overlayEntry = OverlayEntry(
+//       builder: (context) {
+//         // Obtém a lista de popups para o membro específico
+//         List<OverlayEntry> memberPopups = activePopupsMap[NameCategory] ?? [];
+//         int index = memberPopups.indexOf(overlayEntry);
+//         return Positioned(
+//           right: 20,
+//           bottom: 10 + (index * 80), // Empilha verticalmente
+//           child: Material(
+//             color: Colors.transparent,
+//             child: PopUpCreateSubcategory(
+//               nameSubcategory: NameCategory,
+//             ),
+//           ),
+//         );
+//       },
+//     );
+
+//     // Adiciona o popup ao mapa do membro correspondente
+//     activePopupsMap.putIfAbsent(NameCategory, () => []).add(overlayEntry);
+//     overlayState.insert(overlayEntry);
+
+//     // Fecha automaticamente após 10 segundos
+//     Future.delayed(Duration(seconds: 7), () {
+//       if (overlayEntry.mounted) {
+//         overlayEntry.remove();
+//         activePopupsMap[NameCategory]?.remove(overlayEntry);
+//         _updatePopupPositions(NameCategory);
+//       }
+//     });
+//   }
+
+// // Método para reposicionar os popups de um membro específico
+//   void _updatePopupPositions(String NameCategory) {
+//     List<OverlayEntry>? memberPopups = activePopupsMap[NameCategory];
+//     if (memberPopups != null) {
+//       for (var i = 0; i < memberPopups.length; i++) {
+//         memberPopups[i].markNeedsBuild();
+//       }
+//     }
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -264,11 +320,9 @@ class _AddcategoriasState extends State<Addsubcategory> {
                               ),
                               child: Center(
                                 child: Text(
-                                  _getHexColor(_getColorTonalidadePosition(
-                                      _selectedColor, _circlePositionX)),
+                                  _getHexColor(_selectedColor),
                                   style: GoogleFonts.poppins(
-                                    color: _getColorTonalidadePosition(
-                                        _selectedColor, _circlePositionX),
+                                    color: _selectedColor,
                                     fontSize: 17.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -356,22 +410,27 @@ class _AddcategoriasState extends State<Addsubcategory> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 340.sp,
-                        height: 55.sp,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFFF5151),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.sp),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 340.sp,
+                          height: 55.sp,
+                          decoration: ShapeDecoration(
+                            color: Color(0xFFFF5151),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.sp),
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Cancelar',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w400,
+                          child: Center(
+                            child: Text(
+                              'Cancelar',
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ),
                         ),
@@ -380,15 +439,18 @@ class _AddcategoriasState extends State<Addsubcategory> {
                         width: 10.sp,
                       ),
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
                           DataNotfier().sendDataSubcategory(
                               IdCategorys: widget.categoryId,
                               context: context,
                               names: _categoriaController.text,
                               icons: _selectedIcon?.codePoint.toString() ?? "",
-                              iconColors: _getHexColor(
-                                  _getColorTonalidadePosition(
-                                      _selectedColor, _circlePositionX)));
+                              iconColors: _getHexColor(_selectedColor));
+
+                          // showCustomPopup(
+                          //   context,
+                          //   _categoriaController.text,
+                          // );
                         },
                         child: Container(
                           width: 340.sp,

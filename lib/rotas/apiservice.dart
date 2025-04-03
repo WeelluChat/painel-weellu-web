@@ -178,7 +178,7 @@ class ApiService {
   }
 
   Future<List<ResponseModel>> fetchCategoriesModel() async {
-    final url = '${Config.apiUrl}admin-panel/category/all';
+    final url = '${Config.apiUrl}admin-panel/category/all?limit=1000';
 
     try {
       final response = await http.get(

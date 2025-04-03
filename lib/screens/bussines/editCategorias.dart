@@ -9,6 +9,7 @@ import 'package:monitor_site_weellu/utilitarios/icones_phospor.dart';
 
 class Editcategorias extends StatefulWidget {
   final int color;
+
   final ResponseModel categoria;
   const Editcategorias(
       {super.key, required this.categoria, required this.color});
@@ -28,13 +29,22 @@ class _EditcategoriasState extends State<Editcategorias> {
   TextEditingController _searchController =
       TextEditingController(); // Controlador para o campo de pesquisa
   String _searchQuery = ''; // Variável que armazena o texto de pesquisa
-  final TextEditingController _categoriaController = TextEditingController();
+
   IconData? _selectedIcon; // Variável para armazenar o ícone selecionado
   // Posições iniciais do círculo (horizontal e vertical)
   double _circlePositionX = 0.0;
   double _circlePositionY = 0.0;
   double _GreencirclePositionX = 0.0;
   Color _selectedColor = Colors.white; // Variável para armazenar a cor
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      _selectedColor = Color(widget.color); // Variável para armazenar a cor
+    });
+  }
 
   void _pickColor(BuildContext context) {
     showDialog(
@@ -46,6 +56,7 @@ class _EditcategoriasState extends State<Editcategorias> {
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: tempColor,
+              hexInputBar: true,
               onColorChanged: (color) {
                 tempColor = color;
               },
@@ -93,7 +104,8 @@ class _EditcategoriasState extends State<Editcategorias> {
   @override
   Widget build(BuildContext context) {
     int? _loadIcon = widget.categoria.iconName;
-
+    TextEditingController _categoriaController =
+        TextEditingController(text: widget.categoria.nameCategoria);
     return ScreenUtilInit(
       designSize: Size(1920, 1080),
       minTextAdapt: true,
@@ -153,14 +165,23 @@ class _EditcategoriasState extends State<Editcategorias> {
                             child: TextFormField(
                               controller: _categoriaController,
                               style: TextStyle(
-                                color: Color(0xFF3E3E3E),
+                                color: Color.fromARGB(255, 190, 190, 190),
                                 fontSize: 18.sp,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
                               ),
                               decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: widget.categoria.nameCategoria),
+                                border: InputBorder.none,
+                                hintText: widget.categoria.nameCategoria,
+                              ),
+                              onTap: () {
+                                // Move o cursor para o final ao clicar
+                                _categoriaController.selection =
+                                    TextSelection.fromPosition(
+                                  TextPosition(
+                                      offset: _categoriaController.text.length),
+                                );
+                              },
                             ),
                           )
                         ],
@@ -264,7 +285,7 @@ class _EditcategoriasState extends State<Editcategorias> {
                                 child: Text(
                                   widget.categoria.colorIcon.toString(),
                                   style: GoogleFonts.poppins(
-                                    color: Color(widget.color),
+                                    color: _selectedColor,
                                     fontSize: 17.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -285,7 +306,7 @@ class _EditcategoriasState extends State<Editcategorias> {
                               child: _loadIcon != null
                                   ? Icon(
                                       PhosphorIconsData(_loadIcon),
-                                      color: Color(widget.color),
+                                      color: _selectedColor,
                                       size: 50.sp,
                                     )
                                   : SizedBox(),
@@ -385,7 +406,7 @@ class _EditcategoriasState extends State<Editcategorias> {
                               newName: _categoriaController.text,
                               newIconColor: _getHexColor(_selectedColor));
 
-                          Navigator.pop(context);
+                          Navigator.pop(context, true);
                         },
                         child: Container(
                           width: 340.sp,

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:monitor_site_weellu/popups/pop_up_create_category.dart';
 import 'package:monitor_site_weellu/utilitarios/datanotfier.dart';
 import 'package:monitor_site_weellu/utilitarios/icones_phospor.dart';
 
@@ -54,9 +55,6 @@ class _AddcategoriasState extends State<Addcategorias> {
     Color(0xFFFF0000), // Retorno ao Vermelho para continuidade
   ];
 
-  // Color _selectedColor =
-  //     const Color.fromARGB(255, 255, 255, 255); // Cor padrão inicial
-
   Color _getColorTonalidadePosition(Color baseColor, double positionX) {
     double normalizedPosition = positionX / 950; // Normaliza entre 0 e 1
 
@@ -77,64 +75,10 @@ class _AddcategoriasState extends State<Addcategorias> {
     return gradientColors[index];
   }
 
-  // Color _getColorTonalidadePosition(double positionX) {
-  //   // Normaliza a posição para um valor entre 0 e 1
-  //   double normalizedPosition = positionX / 950;
-
-  //   // Interpola entre as cores do gradiente
-  //   return Color.lerp(Colors.black, Colors.white, normalizedPosition)!;
-  // }
-
   // Função para obter o código hexadecimal da cor
   String _getHexColor(Color color) {
     return '#${color.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
   }
-
-  // Função para enviar os dados para a API
-  // Future<void> _sendData() async {
-  //   String name = _categoriaController.text;
-  //   String icon = _selectedIcon?.codePoint.toString() ?? "";
-  //   String iconColor = _getHexColor(_getColorTonalidadePosition(
-  //       _selectedColor, _circlePositionX)); // Convertendo a cor para hex
-
-  //   // Print para ver o que está sendo enviado
-  //   print("Nome: $name");
-  //   print("Ícone: $icon");
-  //   print("Cor do ícone: $iconColor");
-
-  //   // URL e header da requisição
-  //   var url =
-  //       Uri.parse('https://api.weellu.com/api/v1/admin-panel/category/create');
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //     'admin-key': 'super_password_for_admin',
-  //   };
-  //   var body = jsonEncode({
-  //     'name': name,
-  //     'icon': icon,
-  //     'iconColor': iconColor,
-  //   });
-
-  //   try {
-  //     var response = await http.post(url, headers: headers, body: body);
-  //     if (response.statusCode == 201) {
-  //       // Sucesso
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Categoria criada com sucesso!')),
-  //       );
-  //     } else {
-  //       // Falha
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Erro ao criar a categoria!')),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     // Erro de requisição
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Erro de conexão com o servidor!')),
-  //     );
-  //   }
-  // }
 
   void _pickColor(BuildContext context) {
     showDialog(
@@ -145,6 +89,10 @@ class _AddcategoriasState extends State<Addcategorias> {
           title: Text("Selecione uma cor"),
           content: SingleChildScrollView(
             child: ColorPicker(
+              displayThumbColor: true,
+              // enableAlpha: EditableText.debugDeterministicCursor,
+              hexInputBar: true,
+
               pickerColor: tempColor,
               onColorChanged: (color) {
                 tempColor = color;
@@ -163,7 +111,7 @@ class _AddcategoriasState extends State<Addcategorias> {
                 setState(() {
                   _selectedColor = tempColor;
                 });
-                Navigator.pop(context);
+                Navigator.pop(context, true);
               },
               child: Text("Selecionar"),
             ),
@@ -171,6 +119,59 @@ class _AddcategoriasState extends State<Addcategorias> {
         );
       },
     );
+  }
+
+  final Map<String, List<OverlayEntry>> activePopupsMap =
+      {}; // Associa popups a cada membro
+
+  void showCustomPopup(
+    BuildContext context,
+    String NameCategory,
+  ) {
+    OverlayState overlayState = Overlay.of(context)!;
+
+    late OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) {
+        // Obtém a lista de popups para o membro específico
+        List<OverlayEntry> memberPopups = activePopupsMap[NameCategory] ?? [];
+        int index = memberPopups.indexOf(overlayEntry);
+        return Positioned(
+          right: 20,
+          bottom: 10 + (index * 80), // Empilha verticalmente
+          child: Material(
+            color: Colors.transparent,
+            child: PopUpCreateCategory(
+              nameCategoty: NameCategory,
+            ),
+          ),
+        );
+      },
+    );
+
+    // Adiciona o popup ao mapa do membro correspondente
+    activePopupsMap.putIfAbsent(NameCategory, () => []).add(overlayEntry);
+    overlayState.insert(overlayEntry);
+
+    // Fecha automaticamente após 10 segundos
+    Future.delayed(Duration(seconds: 7), () {
+      if (overlayEntry.mounted) {
+        overlayEntry.remove();
+        activePopupsMap[NameCategory]?.remove(overlayEntry);
+        _updatePopupPositions(NameCategory);
+      }
+    });
+  }
+
+// Método para reposicionar os popups de um membro específico
+  void _updatePopupPositions(String NameCategory) {
+    List<OverlayEntry>? memberPopups = activePopupsMap[NameCategory];
+    if (memberPopups != null) {
+      for (var i = 0; i < memberPopups.length; i++) {
+        memberPopups[i].markNeedsBuild();
+      }
+    }
   }
 
   @override
@@ -234,7 +235,7 @@ class _AddcategoriasState extends State<Addcategorias> {
                             child: TextFormField(
                               controller: _categoriaController,
                               style: TextStyle(
-                                color: Color(0xFF3E3E3E),
+                                color: Color.fromARGB(255, 255, 255, 255),
                                 fontSize: 18.sp,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
@@ -259,134 +260,6 @@ class _AddcategoriasState extends State<Addcategorias> {
                     ),
                   ),
                   SizedBox(height: 15.sp),
-
-                  // Container de seletor de tonalidade de cor
-                  // Container(
-                  //   width: 950.sp,
-                  //   height: 100.sp,
-                  //   decoration: BoxDecoration(
-                  //     gradient: LinearGradient(colors: [
-                  //       Colors.black, // Cor escura no lado esquerdo
-                  //       _getColorAtPosition(_GreencirclePositionX),
-                  //       Colors.white, // Cor clara no lado direito
-                  //     ]),
-                  //   ),
-                  //   child: Stack(
-                  //     children: [
-                  //       Positioned(
-                  //         left: _circlePositionX,
-                  //         top: _circlePositionY,
-                  //         child: GestureDetector(
-                  //           onPanUpdate: (details) {
-                  //             setState(() {
-                  //               _circlePositionX = details.localPosition.dx;
-                  //               _circlePositionY = details.localPosition.dy;
-
-                  //               // Garante que o círculo fica dentro dos limites
-                  //               _circlePositionX =
-                  //                   _circlePositionX.clamp(0.0, 950.0 - 28.66);
-                  //               _circlePositionY =
-                  //                   _circlePositionY.clamp(0.0, 100.0 - 28.66);
-
-                  //               // Atualiza a cor selecionada
-                  //               _selectedColor = _getColorTonalidadePosition(
-                  //                   _selectedColor, _GreencirclePositionX);
-                  //             });
-                  //           },
-                  //           child: Container(
-                  //             width: 28.sp,
-                  //             height: 28.sp,
-                  //             decoration: ShapeDecoration(
-                  //               color: Colors.white,
-                  //               shape: OvalBorder(
-                  //                 side: BorderSide(
-                  //                   width: 2.32,
-                  //                   strokeAlign: BorderSide.strokeAlignCenter,
-                  //                   color: Colors.black,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-
-                  // SizedBox(height: 15.sp),
-
-                  // Container do seletor de cor
-                  // Container(
-                  //   width: 956.sp,
-                  //   height: 40.sp,
-                  //   child: Stack(
-                  //     children: [
-                  //       // Gradiente de cores
-                  //       Positioned(
-                  //         left: 0,
-                  //         top: 7.75,
-                  //         child: Container(
-                  //           width: 956.55.sp,
-                  //           height: 13.17.sp,
-                  //           decoration: ShapeDecoration(
-                  //             gradient: LinearGradient(
-                  //               begin: Alignment(1.00, 0.00),
-                  //               end: Alignment(-1, 0),
-                  //               colors: gradientColors,
-                  //             ),
-                  //             shape: RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(8.sp),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-
-                  //       // Círculo movível
-                  //       Positioned(
-                  //         left: _GreencirclePositionX,
-                  //         // top: _circlePositionY,
-                  //         child: GestureDetector(
-                  //           onPanUpdate: (details) {
-                  //             setState(() {
-                  //               // Atualiza a posição do círculo em ambas as direções
-                  //               _GreencirclePositionX =
-                  //                   details.localPosition.dx;
-                  //               // _circlePositionY = details.localPosition.dy;
-
-                  //               // Limita o movimento dentro da área permitida
-                  //               if (_GreencirclePositionX < 0) {
-                  //                 _GreencirclePositionX = 0;
-                  //               } else if (_GreencirclePositionX >
-                  //                   956 - 28.66) {
-                  //                 _GreencirclePositionX = 956 - 28.66;
-                  //               }
-
-                  //               // if (_circlePositionY < 0) {
-                  //               //   _circlePositionY = 0;
-                  //               // } else if (_circlePositionY > 171 - 28.66) {
-                  //               //   _circlePositionY = 171 - 28.66;
-                  //               // }
-                  //             });
-                  //           },
-                  //           child: Container(
-                  //             width: 30.sp,
-                  //             height: 30.sp,
-                  //             decoration: ShapeDecoration(
-                  //               color: Color(0xFF48FF40),
-                  //               shape: OvalBorder(
-                  //                 side: BorderSide(
-                  //                   width: 2.32,
-                  //                   strokeAlign: BorderSide.strokeAlignCenter,
-                  //                   color: Colors.white,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
 
                   SizedBox(height: 15.sp),
 
@@ -471,11 +344,9 @@ class _AddcategoriasState extends State<Addcategorias> {
                               ),
                               child: Center(
                                 child: Text(
-                                  _getHexColor(_getColorTonalidadePosition(
-                                      _selectedColor, _circlePositionX)),
+                                  _getHexColor(_selectedColor),
                                   style: GoogleFonts.poppins(
-                                    color: _getColorTonalidadePosition(
-                                        _selectedColor, _circlePositionX),
+                                    color: _selectedColor,
                                     fontSize: 17.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -563,22 +434,27 @@ class _AddcategoriasState extends State<Addcategorias> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 340.sp,
-                        height: 55.sp,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFFF5151),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.sp),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 340.sp,
+                          height: 55.sp,
+                          decoration: ShapeDecoration(
+                            color: Color(0xFFFF5151),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.sp),
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Cancelar',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w400,
+                          child: Center(
+                            child: Text(
+                              'Cancelar',
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ),
                         ),
@@ -592,9 +468,12 @@ class _AddcategoriasState extends State<Addcategorias> {
                               context: context,
                               names: _categoriaController.text,
                               icons: _selectedIcon?.codePoint.toString() ?? "",
-                              iconColors: _getHexColor(
-                                  _getColorTonalidadePosition(
-                                      _selectedColor, _circlePositionX)));
+                              iconColors: _getHexColor(_selectedColor));
+
+                          // showCustomPopup(
+                          //   context,
+                          //   _categoriaController.text,
+                          // );
                         },
                         child: Container(
                           width: 340.sp,

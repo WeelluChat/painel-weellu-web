@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:monitor_site_weellu/models/categoria.dart';
+import 'package:monitor_site_weellu/popups/pop_up_create_category.dart';
 import 'package:monitor_site_weellu/rotas/apiservice.dart';
 import 'package:monitor_site_weellu/rotas/config.dart';
 import 'package:monitor_site_weellu/screens/bussines/subcategorias.dart';
@@ -45,7 +46,7 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
   }
 
   Future<List<ResponseModel>> fetchSubcategoriesModel() async {
-    final url = '${Config.apiUrl}admin-panel/category/all';
+    final url = '${Config.apiUrl}admin-panel/category/all?limit=1000';
 
     try {
       final response = await http.get(
@@ -99,8 +100,8 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
   }
 
   Future<void> loadData() async {
-    final url =
-        Uri.parse('https://api.weellu.com/api/v1/admin-panel/category/all');
+    final url = Uri.parse(
+        'https://api.weellu.com/api/v1/admin-panel/category/all?limit=1000');
 
     try {
       final response = await http.get(
@@ -116,6 +117,7 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
         final List<dynamic> docs = data['data']['docs'];
         _categorias = ResponseModel.fromJsonList(docs);
         value = List.from(_categorias);
+        print(data);
       } else {
         print('Erro: ${response.statusCode}');
       }
@@ -124,21 +126,29 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
     }
   }
 
-  Future<void> sendData(
-      {required String names,
-      required BuildContext context,
-      required String icons,
-      required String iconColors}) async {
-    String name = names;
+  Future<void> sendData({
+    required String names,
+    required BuildContext context,
+    required String icons,
+    required String iconColors,
+  }) async {
+    String name = names.trim(); // Remove espaços extras
     String icon = icons;
-    String iconColor = iconColors; // Convertendo a cor para hex
+    String iconColor = iconColors;
 
-    // Print para depuração
-    print("Nome: $name");
-    print("Ícone: $icon");
-    print("Cor do ícone: $iconColor");
+    // Verificação para evitar duplicatas
+    bool categoriaExiste = _categorias.any((categoria) =>
+        categoria.nameCategoria?.toLowerCase() == name.toLowerCase());
 
-    // URL e headers
+    if (categoriaExiste) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            backgroundColor: Color.fromARGB(255, 43, 36, 35),
+            content: Text('Já existe uma categoria com esse nome!')),
+      );
+      return; // Interrompe a execução se a categoria já existir
+    }
+
     var url =
         Uri.parse('https://api.weellu.com/api/v1/admin-panel/category/create');
     var headers = {
@@ -154,15 +164,17 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
     try {
       var response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 201) {
-        // Nova categoria adicionada à lista
         final responseData = jsonDecode(response.body);
         final newCategory = ResponseModel.fromJson(responseData['data']);
         _categorias.add(newCategory);
-        value = List.from(_categorias); // Notifica ouvintes sobre a mudança
+        value = List.from(_categorias); // Atualiza a lista
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Categoria criada com sucesso!')),
         );
+        loadData();
+
+        Navigator.pop(context, true);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erro ao criar a categoria!')),
@@ -175,12 +187,66 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
     }
   }
 
-  Future<void> sendDataSubcategory(
-      {required String names,
-      required String IdCategorys,
-      required BuildContext context,
-      required String icons,
-      required String iconColors}) async {
+  final Map<String, List<OverlayEntry>> activePopupsMap =
+      {}; // Associa popups a cada membro
+
+  void showCustomPopup(
+    BuildContext context,
+    String NameCategory,
+  ) {
+    OverlayState overlayState = Overlay.of(context)!;
+
+    late OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) {
+        // Obtém a lista de popups para o membro específico
+        List<OverlayEntry> memberPopups = activePopupsMap[NameCategory] ?? [];
+        int index = memberPopups.indexOf(overlayEntry);
+        return Positioned(
+          right: 20,
+          bottom: 10 + (index * 80), // Empilha verticalmente
+          child: Material(
+            color: Colors.transparent,
+            child: PopUpCreateCategory(
+              nameCategoty: NameCategory,
+            ),
+          ),
+        );
+      },
+    );
+
+    // Adiciona o popup ao mapa do membro correspondente
+    activePopupsMap.putIfAbsent(NameCategory, () => []).add(overlayEntry);
+    overlayState.insert(overlayEntry);
+
+    // Fecha automaticamente após 10 segundos
+    Future.delayed(Duration(seconds: 7), () {
+      if (overlayEntry.mounted) {
+        overlayEntry.remove();
+        activePopupsMap[NameCategory]?.remove(overlayEntry);
+        _updatePopupPositions(NameCategory);
+      }
+    });
+  }
+
+// Método para reposicionar os popups de um membro específico
+  void _updatePopupPositions(String NameCategory) {
+    List<OverlayEntry>? memberPopups = activePopupsMap[NameCategory];
+    if (memberPopups != null) {
+      for (var i = 0; i < memberPopups.length; i++) {
+        memberPopups[i].markNeedsBuild();
+      }
+    }
+  }
+
+  Future<void> sendDataSubcategory({
+    required String names,
+    required String IdCategorys,
+    required BuildContext context,
+    required String icons,
+    required String iconColors,
+  }) async {
     String IdCategory = IdCategorys;
     String name = names;
     String icon = icons;
@@ -203,7 +269,7 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
       'name': name,
       'icon': icon,
       'iconColor': iconColor,
-      'parentId': IdCategory
+      'parentId': IdCategory,
     });
 
     try {
@@ -218,6 +284,18 @@ class DataNotfier extends ValueNotifier<List<ResponseModel>> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Subcategoria criada com sucesso!')),
         );
+
+        // Fechar a tela atual
+        Navigator.pop(context, true);
+
+        // Adicionar delay antes de mostrar o popup
+        Future.delayed(Duration(milliseconds: 500), () {
+          // Exibir o popup após o delay
+          showCustomPopup(
+            context,
+            name,
+          );
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erro ao criar a Subcategoria!')),
