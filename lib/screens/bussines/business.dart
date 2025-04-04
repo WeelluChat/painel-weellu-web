@@ -660,7 +660,7 @@ class _CategoriasState extends State<Categorias> {
                       idCategoria: categoria.idCategoria.toString(),
                       color: _hexToColor(categoria.colorIcon.toString()),
                       nomeCategoria: categoria.nameCategoria.toString(),
-                      code: categoria.iconName as int ?? 62791,
+                      code: categoria.iconName ?? 62791,
                       index: reverseIndex, // Começando do maior para o menor
                       cor: categoria.colorIcon.toString(),
                     );
