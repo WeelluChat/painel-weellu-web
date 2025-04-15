@@ -25,104 +25,46 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff0000),
+      backgroundColor: Color.fromARGB(0, 255, 255, 255),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          return Column(
-            children: [
-              Container(
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      flex: 1,
+          return Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage('assets/frame.png'), fit: BoxFit.cover)),
+            child: Flex(
+              direction: Axis.horizontal,
+              children: [
+                if (MediaQuery.of(context).size.width > 900)
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
                       child: Container(
-                        color: Colors.white,
-                        height: constraints.maxHeight *
-                            1.0, // 80% da altura da tela disponível
-                        // margin: EdgeInsets.all(
-                        //     8), // Margem opcional para espaço entre os containers
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    // color: Colors.red,
-                                    height: 80,
-                                    width: 80,
-                                    child: Image.asset('assets/weellu.png'),
-                                  ),
-                                  Text(
-                                    'Weellu',
-                                    style: GoogleFonts.ubuntu(
-                                        color: Color(0xff003526),
-                                        fontSize: 45,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/weellu1.jpg',
                               ),
-                            ),
-                            showEmail
-                                ? LoginEmail(onEmailVerified: onEmailVerified)
-                                : LoginSenha(email: email),
-                            // Login_senha(),
-                            Container(
-                              // color: Colors.amber,
-                              height: 30,
-                              width: 30,
-                            ),
-                          ],
+                              fit: BoxFit.cover),
                         ),
                       ),
                     ),
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                        color: Colors.black,
-                        height: constraints.maxHeight *
-                            1.0, // 80% da altura da tela disponível
-                        // margin: EdgeInsets.all(
-                        //     8), // Margem opcional para espaço entre os containers
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    // color: Colors.red,
-                                    height: 80,
-                                    width: 80,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              // color: Colors.red,
-                              height: 500,
-                              width: 500,
-                              child: Image.asset('assets/weellu_500.png'),
-                            ),
-                            Container(
-                              // color: Colors.amber,
-                              height: 30,
-                              width: 30,
-                            ),
-                          ],
-                        ),
-                      ),
+                  ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    decoration: BoxDecoration(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        LoginEmail(onEmailVerified: onEmailVerified),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

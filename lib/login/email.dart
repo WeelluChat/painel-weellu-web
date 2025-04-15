@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:monitor_site_weellu/models/auth.dart';
 import 'package:monitor_site_weellu/rotas/apiservice.dart';
+import 'package:monitor_site_weellu/screens/dashboardmaster/dashboardtata.dart';
 
 class LoginEmail extends StatefulWidget {
   final Function(String) onEmailVerified;
@@ -12,7 +14,10 @@ class LoginEmail extends StatefulWidget {
 }
 
 class _LoginEmailState extends State<LoginEmail> {
+  final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  bool isPasswordValid = false;
+  bool isPasswordChecked = false;
   bool isEmailValid = false;
   late ApiService apiService;
 
@@ -35,6 +40,25 @@ class _LoginEmailState extends State<LoginEmail> {
     }
   }
 
+  Future<void> login(String email, String password) async {
+    final responseData = await apiService.login(email, password);
+    if (responseData != null && responseData['user'] != null) {
+      final user = UserModel.fromJson(responseData['user']);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => dashdotata(user: user),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Email ou senha incorretos'),
+        ),
+      );
+    }
+  }
   // Future<void> verifyEmail(String email) async {
   //   final response = await http
   //       .get(Uri.parse('http://192.168.99.239:3000/verify-email?email=$email'));
@@ -52,95 +76,40 @@ class _LoginEmailState extends State<LoginEmail> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
-      width: 600,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'Bem vindo!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 50,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
-              height: 0,
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 20.0,
+            ),
+            child: Column(
+              children: [
+                Container(
+                  height: 80,
+                  width: 80,
+                  child: Image.asset('assets/weellu.png'),
+                ),
+                Text(
+                  'Weellu',
+                  style: GoogleFonts.ubuntu(
+                      color: Color.fromARGB(255, 6, 85, 63),
+                      fontSize: 45,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: Opacity(
-              opacity: 0.50,
-              child: Text(
-                'Bem Vindo, Por favor insira seu login ',
-                style: TextStyle(
-                  color: Color(0xFF404852),
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                  letterSpacing: 0.50,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFD9D9D9),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              width: 450,
-              height: 70,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Container(
-                      height: 60,
-                      width: 210,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            backgroundColor: Color(0xffFFFFFF)),
-                        onPressed: () {},
-                        child: Text(
-                          "Login",
-                          style: GoogleFonts.ubuntu(
-                              color: Colors.black, fontSize: 22),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5.0),
-                    child: Container(
-                      height: 60,
-                      width: 210,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffFFFFFF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          "Registrar",
-                          style: GoogleFonts.ubuntu(
-                              color: Colors.black, fontSize: 22),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            child: Text(
+              'Bem-vindo ao Painel! Insira seu Login.',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                height: 0,
+                letterSpacing: 0.50,
               ),
             ),
           ),
@@ -150,9 +119,9 @@ class _LoginEmailState extends State<LoginEmail> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color.fromARGB(255, 0, 0, 0),
                     border: Border.all(
-                      color: Color(0xFFD9D9D9),
+                      color: Color.fromARGB(255, 100, 97, 97),
                       width: 2,
                     ),
                     borderRadius: BorderRadius.all(
@@ -164,9 +133,9 @@ class _LoginEmailState extends State<LoginEmail> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Icon(Icons.mail),
+                      Icon(Icons.mail, color: const Color.fromARGB(255, 110, 109, 109),),
                       Container(
-                        color: Colors.black,
+                        color: const Color.fromARGB(255, 242, 242, 242),
                         height: 55,
                         width: 1,
                       ),
@@ -177,29 +146,26 @@ class _LoginEmailState extends State<LoginEmail> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Opacity(
-                                  opacity: 0.50,
-                                  child: Text(
-                                    'Endereço de Email',
-                                    style: TextStyle(
-                                      color: Color(0xFF404852),
-                                      fontSize: 17,
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w500,
-                                      height: 0,
-                                      letterSpacing: 0.50,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(top: 10.0),
+                              //   child: Text(
+                              //     'Endereço de Email',
+                              //     style: GoogleFonts.poppins(
+                              //       color: Color.fromARGB(255, 255, 255, 255),
+                              //       fontSize: 17,
+                              //       fontWeight: FontWeight.w500,
+                              //       height: 0,
+                              //       letterSpacing: 0.50,
+                              //     ),
+                              //   ),
+                              // ),
                               TextFormField(
+                                style: GoogleFonts.poppins(color: Colors.white, fontSize: 20),
                                 controller: emailController,
                                 decoration:
-                                    InputDecoration(border: InputBorder.none),
+                                    InputDecoration(border: InputBorder.none, hintText: 'Email'),
                                 onChanged: (value) {
                                   verifyEmail(value);
                                 },
@@ -222,24 +188,121 @@ class _LoginEmailState extends State<LoginEmail> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 25.0),
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    border: Border.all(
+                      color: Color.fromARGB(255, 102, 99, 99),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                  ),
+                  width: 450,
+                  height: 90,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Icon(Icons.lock, color: const Color.fromARGB(255, 104, 103, 103),),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 17),
+                        child: Container(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          height: 55,
+                          width: 1,
+                        ),
+                      ),
+                      Container(
+                        // color: Colors.amber,
+                        // height: 90,
+                        width: 330,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 30.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Padding(
+                              //   padding: const EdgeInsets.only(top: 10.0),
+                              //   child: Text(
+                              //     'Senha',
+                              //     style: GoogleFonts.poppins(
+                              //       color: Color.fromARGB(255, 255, 255, 255),
+                              //       fontSize: 17,
+                              //       fontWeight: FontWeight.w500,
+                              //       height: 0,
+                              //       letterSpacing: 0.50,
+                              //     ),
+                              //   ),
+                              // ),
+                              TextFormField(
+                                
+                                style: GoogleFonts.poppins(color: Colors.white,
+                                fontSize: 20),
+                                obscureText: true,
+                                controller: passwordController,
+                                decoration:
+                                    InputDecoration(border: InputBorder.none,hintText: 'Senha'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 30,
+                        height: 30,
+                      )
+                    ],
+                  ),
+                ),
+                if (isPasswordChecked)
+                  Icon(
+                    isPasswordValid ? Icons.check_circle : Icons.cancel,
+                    color: isPasswordValid ? Colors.green : Colors.red,
+                    size: 30,
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 25.0),
             child: Container(
               decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF003526),
+                    Color(0xFF00A86B),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                 color: isEmailValid ? Color(0xFF003526) : Color(0xFF003526),
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
               ),
-              width: 450,
+              width: 470,
               height: 70,
               child: TextButton(
-                onPressed: isEmailValid
-                    ? () {
-                        widget.onEmailVerified(emailController.text);
-                      }
-                    : null,
+                onPressed: () async {
+                  isEmailValid
+                      ? () {
+                          widget.onEmailVerified(emailController.text);
+                        }
+                      : null;
+                  await login(emailController.text, passwordController.text);
+                },
                 child: Center(
                   child: Text(
-                    'Continue',
+                    'Login',
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 20,
