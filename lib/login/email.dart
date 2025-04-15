@@ -161,14 +161,22 @@ class _LoginEmailState extends State<LoginEmail> {
                               //     ),
                               //   ),
                               // ),
-                              TextFormField(
-                                style: GoogleFonts.poppins(color: Colors.white, fontSize: 20),
-                                controller: emailController,
-                                decoration:
-                                    InputDecoration(border: InputBorder.none, hintText: 'Email'),
-                                onChanged: (value) {
-                                  verifyEmail(value);
-                                },
+                              Theme(
+                                data: Theme.of(context).copyWith(
+                                  textSelectionTheme: TextSelectionThemeData(
+                                    cursorColor: const Color.fromARGB(255, 25, 95, 40),
+                                    selectionColor: Colors.green
+                                  )
+                                ),
+                                child: TextFormField(
+                                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 20),
+                                  controller: emailController,
+                                  decoration:
+                                      InputDecoration(border: InputBorder.none, hintText: 'Email', ),
+                                  onChanged: (value) {
+                                    verifyEmail(value);
+                                  },
+                                ),
                               )
                             ],
                           ),
@@ -240,14 +248,22 @@ class _LoginEmailState extends State<LoginEmail> {
                               //     ),
                               //   ),
                               // ),
-                              TextFormField(
-                                
-                                style: GoogleFonts.poppins(color: Colors.white,
-                                fontSize: 20),
-                                obscureText: true,
-                                controller: passwordController,
-                                decoration:
-                                    InputDecoration(border: InputBorder.none,hintText: 'Senha'),
+                              Theme(
+                                data: Theme.of(context).copyWith(
+                                  textSelectionTheme: TextSelectionThemeData(
+                                    cursorColor: const Color.fromARGB(255, 24, 92, 27),
+                                    selectionColor: Colors.green
+                                  )
+                                ),
+                                child: TextFormField(
+                                  
+                                  style: GoogleFonts.poppins(color: Colors.white,
+                                  fontSize: 20),
+                                  obscureText: true,
+                                  controller: passwordController,
+                                  decoration:
+                                      InputDecoration(border: InputBorder.none,hintText: 'Senha'),
+                                ),
                               ),
                             ],
                           ),
