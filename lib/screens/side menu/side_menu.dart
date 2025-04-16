@@ -39,7 +39,7 @@ class _SideMenuState extends State<SideMenu> {
   void initState() {
     super.initState();
     _apiService = ApiService(
-      baseUrl: 'http://192.168.99.239:3000', // Configure seu URL base aqui
+      baseUrl: 'https://api.painel.weellu.com', // Configure seu URL base aqui
     );
     // Carregar a imagem de perfil assim que o widget for criado
     _loadProfileImage();

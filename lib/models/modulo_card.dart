@@ -81,7 +81,7 @@ class _modulo_cardState extends State<modulo_card> {
 
   Future<Solicitacoes> fetchSolicitacoes() async {
     final response = await http
-        .get(Uri.parse('http://192.168.99.239:3000/api/contagem_solicitacoes'));
+        .get(Uri.parse('https://api.painel.weellu.com/api/contagem_solicitacoes'));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);

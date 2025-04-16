@@ -10,7 +10,7 @@ class ProviderComment extends ChangeNotifier {
 
   loadCommtent() async {
     newComments =
-        await ApiService(baseUrl: 'http://192.168.99.239:3000').fetchComments();
+        await ApiService(baseUrl: 'https://api.painel.weellu.com').fetchComments();
     notifyListeners();
   }
 

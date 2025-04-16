@@ -21,7 +21,7 @@ class _CardComenterState extends State<CardComenter> {
   int approvedCount = 0;
   int rejectedCount = 0;
   final ApiService apiService =
-      ApiService(baseUrl: 'http://192.168.99.239:3000');
+      ApiService(baseUrl: 'https://api.painel.weellu.com');
 
   final List<Color> colors = [
     Colors.blue,

@@ -24,7 +24,7 @@ class Tatateste extends StatefulWidget {
 class _TatatesteState extends State<Tatateste> {
   File? _imageFile;
   final ApiService apiService =
-      ApiService(baseUrl: 'http://192.168.99.239:3000'); // URL da API
+      ApiService(baseUrl: 'https://api.painel.weellu.com'); // URL da API
 
   @override
   void initState() {
