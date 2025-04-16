@@ -24,7 +24,7 @@ class _LoginEmailState extends State<LoginEmail> {
   @override
   void initState() {
     super.initState();
-    apiService = ApiService(baseUrl: 'http://192.168.99.239:3000');
+    apiService = ApiService(baseUrl: 'https://api.painel.weellu.com');
   }
 
   Future<void> verifyEmail(String email) async {

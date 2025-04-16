@@ -15,7 +15,7 @@ class _ChartmediasState extends State<Chartmedias> {
       padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 30),
       child: Container(
         decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 231, 12, 12),
+          color: Color.fromARGB(255, 255, 253, 253),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
