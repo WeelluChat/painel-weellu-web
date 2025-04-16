@@ -82,248 +82,246 @@ class _SideMenuState extends State<SideMenu> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return SingleChildScrollView(
-          child: Expanded(
-            child: Container(
-              child: Column(
-                children: [
-                  Container(
+        return Expanded(
+          child: Container(
+            child: Column(
+              children: [
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 90 * scaleFactor,
+                          width: 90 * scaleFactor,
+                          child: Image.asset('assets/weellu.png'),
+                        ),
+                        Text(
+                          'Weellu',
+                          style: GoogleFonts.ubuntu(
+                            color: Colors.white,
+                            fontSize: fontSize(45),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 30.sp, bottom: 20.sp),
+                  child: Container(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
+                      padding: EdgeInsets.only(left: 10.sp),
                       child: Row(
                         children: [
                           Container(
-                            height: 90 * scaleFactor,
-                            width: 90 * scaleFactor,
-                            child: Image.asset('assets/weellu.png'),
+                            height: 70 * scaleFactor,
+                            width: 70 * scaleFactor,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: profileProvider.profileImageBase64 !=
+                                    null
+                                ? Image.memory(
+                                    base64Decode(profileProvider
+                                        .profileImageBase64!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'Add Image',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                           ),
-                          Text(
-                            'Weellu',
-                            style: GoogleFonts.ubuntu(
-                              color: Colors.white,
-                              fontSize: fontSize(45),
-                              fontWeight: FontWeight.w800,
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.sp),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.userName,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: fontSize(22.sp),
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                Opacity(
+                                  opacity: 0.70,
+                                  child: Text(
+                                    widget.userEmail,
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.white,
+                                      fontSize: fontSize(17.sp),
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 30.sp, bottom: 50.sp),
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.sp),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 70 * scaleFactor,
-                              width: 70 * scaleFactor,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: profileProvider.profileImageBase64 !=
-                                      null
-                                  ? Image.memory(
-                                      base64Decode(profileProvider
-                                          .profileImageBase64!),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Center(
-                                      child: Text(
-                                        'Add Image',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10.sp),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.userName,
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: fontSize(22.sp),
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  Opacity(
-                                    opacity: 0.70,
-                                    child: Text(
-                                      widget.userEmail,
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: fontSize(17.sp),
-                                        fontWeight: FontWeight.w200,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  _buildActionButton(
-                    Icons.view_quilt_rounded,
-                    'Dashboard',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'DashboardMaster',
-                    onPressed: () {
-                      _handleMenuItemSelected('DashboardMaster');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.account_box_rounded,
-                    'User',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'tatateste',
-                    onPressed: () {
-                      _handleMenuItemSelected('tatateste');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.supervisor_account_rounded,
-                    'Integration',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Integration',
-                    onPressed: () {
-                      _handleMenuItemSelected('Integration');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.sms,
-                    'Comentários',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Dashboard',
-                    onPressed: () {
-                      _handleMenuItemSelected('Dashboard');
-                    },
-                  ),
-                  _buildActionButton(
-                    FontAwesomeIcons.bullhorn,
-                    'Broadcast',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'ProfileUser',
-                    onPressed: () {
-                      _handleMenuItemSelected('ProfileUser');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.person,
-                    'Business',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'business',
-                    onPressed: () {
-                      _handleMenuItemSelected('business');
-                    },
-                  ),
-                  _buildActionButton(
-                    PhosphorIcons.flag_banner_fill,
-                    'Adversiting',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Adversiting',
-                    onPressed: () {
-                      _handleMenuItemSelected('Adversiting');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.person,
-                    'Users',
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'users',
-                    onPressed: () {
-                      _handleMenuItemSelected('users');
-                    },
-                  ),
-                  _buildActionButton(
-                    FontAwesomeIcons.phoneVolume,
-                    "Calls",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == '',
-                    onPressed: () {
-                      _handleMenuItemSelected('');
-                    },
-                  ),
-                  _buildActionButton(
-                    FontAwesomeIcons.arrowTrendUp,
-                    "Surveys",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Surveys',
-                    onPressed: () {
-                      _handleMenuItemSelected('Surveys');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.view_carousel,
-                    "Stories",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Stories',
-                    onPressed: () {
-                      _handleMenuItemSelected('Stories');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.settings,
-                    "Landing Page",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Landing Page',
-                    onPressed: () {
-                      _handleMenuItemSelected('Landing Page');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.app_shortcut,
-                    "Site Images ",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'App Update',
-                    onPressed: () {
-                      _handleMenuItemSelected('App Update');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.circle_notifications,
-                    "Notifications",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Notifications',
-                    onPressed: () {
-                      _handleMenuItemSelected('Notifications');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.bar_chart,
-                    "SEO",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'SEO',
-                    onPressed: () {
-                      _handleMenuItemSelected('SEO');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.help_center,
-                    "Site Help & Terms ",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Site Help & Terms ',
-                    onPressed: () {
-                      _handleMenuItemSelected('Site Help & Terms ');
-                    },
-                  ),
-                  _buildActionButton(
-                    Icons.logout,
-                    "Logout",
-                    scaleFactor: scaleFactor,
-                    isSelected: _selectedMenuItem == 'Logout',
-                    onPressed: () {
-                      _handleMenuItemSelected('Logout');
-                    },
-                  ),
-                ],
-              ),
+                ),
+                _buildActionButton(
+                  Icons.view_quilt_rounded,
+                  'Dashboard',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'DashboardMaster',
+                  onPressed: () {
+                    _handleMenuItemSelected('DashboardMaster');
+                  },
+                ),
+                _buildActionButton(
+                  Icons.account_box_rounded,
+                  'User',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'tatateste',
+                  onPressed: () {
+                    _handleMenuItemSelected('tatateste');
+                  },
+                ),
+                _buildActionButton(
+                  Icons.supervisor_account_rounded,
+                  'Integration',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'Integration',
+                  onPressed: () {
+                    _handleMenuItemSelected('Integration');
+                  },
+                ),
+                _buildActionButton(
+                  Icons.sms,
+                  'Comentários',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'Dashboard',
+                  onPressed: () {
+                    _handleMenuItemSelected('Dashboard');
+                  },
+                ),
+                _buildActionButton(
+                  FontAwesomeIcons.bullhorn,
+                  'Broadcast',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'ProfileUser',
+                  onPressed: () {
+                    _handleMenuItemSelected('ProfileUser');
+                  },
+                ),
+                _buildActionButton(
+                  Icons.person,
+                  'Business',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'business',
+                  onPressed: () {
+                    _handleMenuItemSelected('business');
+                  },
+                ),
+                _buildActionButton(
+                  PhosphorIcons.flag_banner_fill,
+                  'Adversiting',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'Adversiting',
+                  onPressed: () {
+                    _handleMenuItemSelected('Adversiting');
+                  },
+                ),
+                _buildActionButton(
+                  Icons.person,
+                  'Users',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'users',
+                  onPressed: () {
+                    _handleMenuItemSelected('users');
+                  },
+                ),
+                _buildActionButton(
+                  FontAwesomeIcons.phoneVolume,
+                  "Calls",
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == '',
+                  onPressed: () {
+                    _handleMenuItemSelected('');
+                  },
+                ),
+                _buildActionButton(
+                  FontAwesomeIcons.arrowTrendUp,
+                  "Surveys",
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'Surveys',
+                  onPressed: () {
+                    _handleMenuItemSelected('Surveys');
+                  },
+                ),
+                // _buildActionButton(
+                //   Icons.view_carousel,
+                //   "Stories",
+                //   scaleFactor: scaleFactor,
+                //   isSelected: _selectedMenuItem == 'Stories',
+                //   onPressed: () {
+                //     _handleMenuItemSelected('Stories');
+                //   },
+                // ),
+                // _buildActionButton(
+                //   Icons.settings,
+                //   "Landing Page",
+                //   scaleFactor: scaleFactor,
+                //   isSelected: _selectedMenuItem == 'Landing Page',
+                //   onPressed: () {
+                //     _handleMenuItemSelected('Landing Page');
+                //   },
+                // ),
+                // _buildActionButton(
+                //   Icons.app_shortcut,
+                //   "Site Images ",
+                //   scaleFactor: scaleFactor,
+                //   isSelected: _selectedMenuItem == 'App Update',
+                //   onPressed: () {
+                //     _handleMenuItemSelected('App Update');
+                //   },
+                // ),
+                // _buildActionButton(
+                //   Icons.circle_notifications,
+                //   "Notifications",
+                //   scaleFactor: scaleFactor,
+                //   isSelected: _selectedMenuItem == 'Notifications',
+                //   onPressed: () {
+                //     _handleMenuItemSelected('Notifications');
+                //   },
+                // ),
+                // _buildActionButton(
+                //   Icons.bar_chart,
+                //   "SEO",
+                //   scaleFactor: scaleFactor,
+                //   isSelected: _selectedMenuItem == 'SEO',
+                //   onPressed: () {
+                //     _handleMenuItemSelected('SEO');
+                //   },
+                // ),
+                // _buildActionButton(
+                //   Icons.help_center,
+                //   "Site Help & Terms ",
+                //   scaleFactor: scaleFactor,
+                //   isSelected: _selectedMenuItem == 'Site Help & Terms ',
+                //   onPressed: () {
+                //     _handleMenuItemSelected('Site Help & Terms ');
+                //   },
+                // ),
+                _buildActionButton(
+                  Icons.logout,
+                  "Logout",
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'Logout',
+                  onPressed: () {
+                    _handleMenuItemSelected('Logout');
+                  },
+                ),
+              ],
             ),
           ),
         );
