@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                   Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(50.0),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -53,13 +53,16 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    decoration: BoxDecoration(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        LoginEmail(onEmailVerified: onEmailVerified),
-                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      decoration: BoxDecoration(),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          LoginEmail(onEmailVerified: onEmailVerified),
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -312,7 +312,7 @@ class TableHeader extends StatelessWidget {
     return Container(
       height: 35.sp,
       decoration: const BoxDecoration(
-        color: Color(0xff292929),
+        color: Color.fromARGB(255, 19, 17, 17),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -333,7 +333,7 @@ class TableHeader extends StatelessWidget {
       flex: flex,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 0.08, color: Colors.grey),
+          border: Border.all(width: 0.08, color: const Color(0xFF9E9E9E)),
         ),
         child: Center(
           child: Text(
@@ -365,7 +365,7 @@ class IntegrationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 37.sp,
-      color: index.isEven ? const Color(0xFF1F1F1F) : const Color(0xff292929),
+      color: index.isEven ? const Color.fromARGB(255, 30, 29, 29) : const Color.fromARGB(255, 19, 17, 17),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -397,7 +397,7 @@ class IntegrationRow extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: GoogleFonts.montserrat(
-              color: color ?? const Color(0xFFEAEAF0),
+              color: color ?? const Color.fromARGB(255, 255, 255, 255),
               fontSize: 17.sp,
               fontWeight: FontWeight.w400,
             ),

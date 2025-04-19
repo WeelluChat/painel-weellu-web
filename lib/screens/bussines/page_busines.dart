@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PageBusines extends StatefulWidget {
   const PageBusines({super.key});
@@ -26,10 +27,9 @@ class _PageBusinesState extends State<PageBusines> {
                       conteudo: Center(
                         child: Text(
                           '01',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 20.sp,
-                            fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -70,10 +70,9 @@ class _PageBusinesState extends State<PageBusines> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Loja do Fulano Variedades',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontSize: 20.sp,
-                              fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -87,10 +86,9 @@ class _PageBusinesState extends State<PageBusines> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'financeiro@apexnet.com',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontSize: 20.sp,
-                              fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
                             ),
                           ),

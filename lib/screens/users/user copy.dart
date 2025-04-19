@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -176,7 +177,7 @@ class _UsersPagesState extends State<UsersPages> {
                   padding: EdgeInsets.all(35.sp),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xff292929),
+                      color: Color.fromARGB(255, 24, 24, 24),
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
@@ -244,16 +245,17 @@ class _UsersPagesState extends State<UsersPages> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: DropdownButton2<String>(
+          underline: SizedBox(),
           value: selectedCountry,
           isExpanded: true,
           alignment: Alignment.center,
-          items: countries.map((String value) {
+          items: countries.map((String value) { 
             return DropdownMenuItem<String>(
               value: value,
               alignment: Alignment.center,
               child: Text(
                 value,
-                style: TextStyle(color: Colors.black, fontSize: 17.sp),
+                style: GoogleFonts.poppins(color: Colors.black, fontSize: 17.sp),
               ),
             );
           }).toList(),
@@ -281,7 +283,7 @@ class _UsersPagesState extends State<UsersPages> {
           padding: EdgeInsets.only(right: 20.sp),
           child: Text(
             'Exibindo ${filteredUsers.length} usuários',
-            style: TextStyle(color: Colors.white, fontSize: 17.sp),
+            style: GoogleFonts.poppins(color: Colors.white, fontSize: 17.sp),
           ),
         ),
         Padding(
@@ -290,9 +292,10 @@ class _UsersPagesState extends State<UsersPages> {
             width: 120.sp,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: DropdownButton2<String>(
+            child: DropdownButton2<String>( 
+              underline: SizedBox(),
               value: filterOption,
               isExpanded:
                   true, // Expande o botão para ocupar todo o espaço disponível
@@ -303,7 +306,7 @@ class _UsersPagesState extends State<UsersPages> {
                   alignment: Alignment.center, // Centraliza o texto no item
                   child: Text(
                     value,
-                    style: TextStyle(color: Colors.black, fontSize: 17.sp),
+                    style: GoogleFonts.poppins(color: Colors.black, fontSize: 17.sp),
                   ),
                 );
               }).toList(),
@@ -340,23 +343,24 @@ class _UsersPagesState extends State<UsersPages> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 190.sp,
-              child: TextFormField(
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.sp,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-                onChanged: filterUsers,
-                decoration: InputDecoration(
-                  hintText: "Buscar usuário",
-                  hintStyle: TextStyle(
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Container(
+                width: 180.sp,
+                child: TextFormField(
+                  style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 17.sp,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
+                  ),
+                  onChanged: filterUsers,
+                  decoration: InputDecoration(
+                    hintText: "Buscar usuário",
+                    hintStyle: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ),

@@ -65,7 +65,7 @@ class _CardComenterState extends State<CardComenter> {
           child: Padding(
             padding: EdgeInsets.only(left: 70.sp, right: 70.sp),
             child: Container(
-              color: Color(0xff212121),
+              color: Color.fromARGB(255, 19, 17, 17),
               child: Column(
                 children: [
                   Padding(

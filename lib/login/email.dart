@@ -100,16 +100,18 @@ class _LoginEmailState extends State<LoginEmail> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: Text(
-              'Bem-vindo ao Painel! Insira seu Login.',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                height: 0,
-                letterSpacing: 0.50,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text(
+                'Bem-vindo ao Painel! Insira seu Login.',
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                  letterSpacing: 0.50,
+                ),
               ),
             ),
           ),
@@ -128,67 +130,76 @@ class _LoginEmailState extends State<LoginEmail> {
                       Radius.circular(15),
                     ),
                   ),
-                  width: 450,
-                  height: 90,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(Icons.mail, color: const Color.fromARGB(255, 110, 109, 109),),
-                      Container(
-                        color: const Color.fromARGB(255, 242, 242, 242),
-                        height: 55,
-                        width: 1,
-                      ),
-                      Container(
-                        // color: Colors.red,
-                        height: 90,
-                        width: 330,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Padding(
-                              //   padding: const EdgeInsets.only(top: 10.0),
-                              //   child: Text(
-                              //     'Endereço de Email',
-                              //     style: GoogleFonts.poppins(
-                              //       color: Color.fromARGB(255, 255, 255, 255),
-                              //       fontSize: 17,
-                              //       fontWeight: FontWeight.w500,
-                              //       height: 0,
-                              //       letterSpacing: 0.50,
-                              //     ),
-                              //   ),
-                              // ),
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  textSelectionTheme: TextSelectionThemeData(
-                                    cursorColor: const Color.fromARGB(255, 25, 95, 40),
-                                    selectionColor: Colors.green
+                  width: 475,
+                  height: 60,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.mail, color: const Color.fromARGB(255, 110, 109, 109),),
+                        // Container(
+                        //   color: const Color.fromARGB(255, 242, 242, 242),
+                        //   height: 55,
+                        //   width: 1,
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Container(
+                            // color: Colors.red,
+                            height: 90,
+                            width: 330,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(top: 10.0),
+                                  //   child: Text(
+                                  //     'Endereço de Email',
+                                  //     style: GoogleFonts.poppins(
+                                  //       color: Color.fromARGB(255, 255, 255, 255),
+                                  //       fontSize: 17,
+                                  //       fontWeight: FontWeight.w500,
+                                  //       height: 0,
+                                  //       letterSpacing: 0.50,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  Theme(
+                                    data: Theme.of(context).copyWith(
+                                      textSelectionTheme: TextSelectionThemeData(
+                                        cursorColor: const Color.fromARGB(255, 25, 95, 40),
+                                        selectionColor: Colors.green
+                                      )
+                                    ),
+                                    child: TextFormField(
+                                      style: GoogleFonts.poppins(color: Colors.white, fontSize: 20),
+                                      controller: emailController,
+                                      decoration:
+                                          InputDecoration(border: InputBorder.none, hintText: 'E-mail', ),
+                                      onChanged: (value) {
+                                        verifyEmail(value);
+                                      },
+                                    ),
                                   )
-                                ),
-                                child: TextFormField(
-                                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 20),
-                                  controller: emailController,
-                                  decoration:
-                                      InputDecoration(border: InputBorder.none, hintText: 'Email', ),
-                                  onChanged: (value) {
-                                    verifyEmail(value);
-                                  },
-                                ),
-                              )
-                            ],
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      if (isEmailValid)
-                        Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 30,
-                        ),
-                    ],
+                        if (isEmailValid)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 30,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -209,29 +220,29 @@ class _LoginEmailState extends State<LoginEmail> {
                       Radius.circular(15),
                     ),
                   ),
-                  width: 450,
-                  height: 90,
+                  width: 475,
+                  height: 60,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
+                        padding: const EdgeInsets.only(left: 8),
                         child: Icon(Icons.lock, color: const Color.fromARGB(255, 104, 103, 103),),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 17),
-                        child: Container(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          height: 55,
-                          width: 1,
-                        ),
+                        // child: Container(
+                        //   color: const Color.fromARGB(255, 255, 255, 255),
+                        //   height: 55,
+                        //   width: 1,
+                        // ),
                       ),
                       Container(
                         // color: Colors.amber,
                         // height: 90,
                         width: 330,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 30.0),
+                          padding: const EdgeInsets.only(left: 3.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

@@ -239,7 +239,7 @@ class _BusinessState extends State<Business> {
       splitScreenMode: true,
       builder: (context, child) {
         return Container(
-          color: Color(0xff0F0F0F),
+          color: Color.fromARGB(255, 1, 4, 2),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 45.sp),
             child: SingleChildScrollView(
@@ -315,7 +315,7 @@ class _BusinessState extends State<Business> {
                     width: 1540.sp,
                     height: 900.sp,
                     decoration: BoxDecoration(
-                      color: Color(0xFF171718),
+                      color: Color.fromARGB(255, 19, 17, 17),
                       borderRadius:
                           BorderRadius.only(topRight: Radius.circular(10.sp)),
                       border: Border(
@@ -822,7 +822,7 @@ class _CategoriasState extends State<Categorias> {
       double borderLeft = 0,
       double borderRight = 0,
       Alignment alignment = Alignment.center,
-      Color corText = const Color(0xff7D7F87)}) {
+      Color corText = const Color.fromARGB(255, 76, 77, 82)}) {
     return Container(
       width: width,
       height: 55.sp,
@@ -1009,12 +1009,11 @@ class _BussinespageState extends State<Bussinespage> {
                 SizedBox(width: 10.sp),
                 Text(
                   categorias[index]['text'],
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     color: selectedMenuIndex == index
                         ? Color(0xFF009D6D)
                         : Color(0xff7D7F87),
                     fontSize: 17.30,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -1045,7 +1044,7 @@ class _BussinespageState extends State<Bussinespage> {
               decoration: ShapeDecoration(
                 color: Color(0xFF1F1F1F),
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 0.80, color: Color(0xFF53555B)),
+                  side: BorderSide(width: 0.80, color: Color.fromARGB(255, 55, 56, 59)),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(9.sp),
                     topRight: Radius.circular(9.sp),

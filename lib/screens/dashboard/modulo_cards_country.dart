@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:countries_world_map/countries_world_map.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -145,7 +146,7 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
               padding: const EdgeInsets.all(.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xff292929),
+                  color: const Color.fromARGB(255, 19, 17, 17),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     bottomLeft: Radius.circular(10),
@@ -215,7 +216,7 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
               padding: const EdgeInsets.all(0.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xff292929),
+                  color: const Color.fromARGB(255, 19, 17, 17),
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(10),
                     topRight: Radius.circular(10),
@@ -265,7 +266,7 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
                         width: double.infinity,
                         child: Text(
                           'Número Total de Usuários: $totalUsers',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -311,14 +312,14 @@ class _Estados extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 16,
-            height: 16,
+            width: 18,
+            height: 18,
             color: cor,
             margin: EdgeInsets.only(right: 8),
           ),
           Text(
             texto,
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               color: Colors.white,
               fontSize: 16,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:monitor_site_weellu/screens/dashboard/ChartMedias.dart';
 
 import 'modulo_cards_country.dart';
@@ -32,17 +33,17 @@ class _DashMasterState extends State<DashMaster> {
                   ),
                 ),
                 child: Row(
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.only(left: 15.0),
                       child: Text(
                         'Dashboard',
-                        style: TextStyle(
-                          color: Color(0xFFEAEAF0),
-                          fontSize: 40,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.67,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                          letterSpacing: 0.50,
                         ),
                       ),
                     ),

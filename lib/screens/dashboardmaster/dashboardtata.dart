@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monitor_site_weellu/screens/admin/config_profile.dart';
 import 'package:monitor_site_weellu/screens/bussines/business.dart';
 import '../comentarios/comentarios.dart';
@@ -49,20 +50,17 @@ class _dashdotataState extends State<dashdotata> {
           ),
           Expanded(
             flex: 5,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20.0, bottom: 20, right: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xff212121),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
-                child: _buildCurrentPage(),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 1, 4, 2),
+                // borderRadius: BorderRadius.only(
+                //   bottomLeft: Radius.circular(30),
+                //   topLeft: Radius.circular(30),
+                //   topRight: Radius.circular(30),
+                //   bottomRight: Radius.circular(30),
+                // ),
               ),
+              child: _buildCurrentPage(),
             ),
           ),
         ],
@@ -117,7 +115,7 @@ class _dashdotataState extends State<dashdotata> {
         return Center(
           child: Text(
             'Page not found',
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.poppins(color: Colors.white),
           ),
         );
     }

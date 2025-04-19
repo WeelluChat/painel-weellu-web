@@ -84,23 +84,24 @@ class _SideMenuState extends State<SideMenu> {
       builder: (context, child) {
         return Expanded(
           child: Container(
+            color: const Color.fromARGB(255, 1, 4, 2),
             child: Column(
               children: [
                 Container(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
+                    padding: const EdgeInsets.only(left: 10.0, top: 30),
                     child: Row(
                       children: [
                         Container(
-                          height: 90 * scaleFactor,
-                          width: 90 * scaleFactor,
+                          height: 60 * scaleFactor,
+                          width: 60 * scaleFactor,
                           child: Image.asset('assets/weellu.png'),
                         ),
                         Text(
                           'Weellu',
                           style: GoogleFonts.ubuntu(
                             color: Colors.white,
-                            fontSize: fontSize(45),
+                            fontSize: fontSize(35),
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -109,64 +110,64 @@ class _SideMenuState extends State<SideMenu> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30.sp, bottom: 20.sp),
-                  child: Container(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10.sp),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 70 * scaleFactor,
-                            width: 70 * scaleFactor,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: profileProvider.profileImageBase64 !=
-                                    null
-                                ? Image.memory(
-                                    base64Decode(profileProvider
-                                        .profileImageBase64!),
-                                    fit: BoxFit.cover,
-                                  )
-                                : Center(
-                                    child: Text(
-                                      'Add Image',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10.sp),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.userName,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: fontSize(22.sp),
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                                Opacity(
-                                  opacity: 0.70,
-                                  child: Text(
-                                    widget.userEmail,
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: fontSize(17.sp),
-                                      fontWeight: FontWeight.w200,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  padding: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
+                  // child: Container(
+                  //   child: Padding(
+                  //     padding: EdgeInsets.only(left: 10.sp),
+                  //     child: Row(
+                  //       children: [
+                  //         Container(
+                  //           height: 70 * scaleFactor,
+                  //           width: 70 * scaleFactor,
+                  //           decoration: BoxDecoration(
+                  //             borderRadius:
+                  //                 BorderRadius.all(Radius.circular(10)),
+                  //           ),
+                  //           child: profileProvider.profileImageBase64 !=
+                  //                   null
+                  //               ? Image.memory(
+                  //                   base64Decode(profileProvider
+                  //                       .profileImageBase64!),
+                  //                   fit: BoxFit.cover,
+                  //                 )
+                  //               : Center(
+                  //                   child: Text(
+                  //                     'Add Image',
+                  //                     style: TextStyle(color: Colors.white),
+                  //                   ),
+                  //                 ),
+                  //         ),
+                  //         Padding(
+                  //           padding: EdgeInsets.only(left: 10.sp),
+                  //           child: Column(
+                  //             crossAxisAlignment: CrossAxisAlignment.start,
+                  //             children: [
+                  //               Text(
+                  //                 widget.userName,
+                  //                 style: GoogleFonts.poppins(
+                  //                   color: Colors.white,
+                  //                   fontSize: fontSize(22.sp),
+                  //                   fontWeight: FontWeight.w800,
+                  //                 ),
+                  //               ),
+                  //               Opacity(
+                  //                 opacity: 0.70,
+                  //                 child: Text(
+                  //                   widget.userEmail,
+                  //                   style: GoogleFonts.poppins(
+                  //                     color: Colors.white,
+                  //                     fontSize: fontSize(17.sp),
+                  //                     fontWeight: FontWeight.w200,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 _buildActionButton(
                   Icons.view_quilt_rounded,
@@ -177,15 +178,7 @@ class _SideMenuState extends State<SideMenu> {
                     _handleMenuItemSelected('DashboardMaster');
                   },
                 ),
-                _buildActionButton(
-                  Icons.account_box_rounded,
-                  'User',
-                  scaleFactor: scaleFactor,
-                  isSelected: _selectedMenuItem == 'tatateste',
-                  onPressed: () {
-                    _handleMenuItemSelected('tatateste');
-                  },
-                ),
+                
                 _buildActionButton(
                   Icons.supervisor_account_rounded,
                   'Integration',
@@ -256,6 +249,15 @@ class _SideMenuState extends State<SideMenu> {
                   isSelected: _selectedMenuItem == 'Surveys',
                   onPressed: () {
                     _handleMenuItemSelected('Surveys');
+                  },
+                ),
+                _buildActionButton(
+                  Icons.account_box_rounded,
+                  'Logins',
+                  scaleFactor: scaleFactor,
+                  isSelected: _selectedMenuItem == 'tatateste',
+                  onPressed: () {
+                    _handleMenuItemSelected('tatateste');
                   },
                 ),
                 // _buildActionButton(
@@ -339,7 +341,7 @@ class _SideMenuState extends State<SideMenu> {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        color: isSelected ? Color(0xff212121) : Colors.transparent,
+        color: isSelected ? Color(0xff051309) : Colors.transparent,
         child: Padding(
           padding: EdgeInsets.only(left: 40.sp),
           child: Row(
@@ -350,7 +352,7 @@ class _SideMenuState extends State<SideMenu> {
                 color: label == "Logout"
                     ? Colors.red[400]
                     : isSelected
-                        ? Colors.green
+                        ? const Color.fromARGB(255, 255, 255, 255)
                         : const Color.fromARGB(255, 255, 255, 255)
                             .withOpacity(0.7),
                 size: 23.sp,
@@ -363,7 +365,7 @@ class _SideMenuState extends State<SideMenu> {
                     color: label == "Logout"
                         ? Colors.red[400]
                         : isSelected
-                            ? Colors.green
+                            ? const Color.fromARGB(255, 255, 255, 255)
                             : Colors.white.withOpacity(0.7),
                     fontSize: 20.sp,
                     fontWeight: isSelected ? FontWeight.w500 : FontWeight.w200,

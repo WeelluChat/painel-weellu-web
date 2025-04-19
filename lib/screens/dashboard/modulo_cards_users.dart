@@ -47,6 +47,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       final data = json.decode(response.body);
 
       setState(() {
@@ -70,7 +71,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
       direction: Axis.horizontal,
       children: [
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color(0xFF292929),
             Valor: '0',
             MiniContainer: azulFraco,
             Icone: Icons.person,
@@ -188,7 +189,7 @@ Widget CardsUser(
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: CorContinerGeral,
+        color: const Color.fromARGB(255, 19, 17, 17),
         borderRadius: BorderRadius.all(
           Radius.circular(width * 0.03),
         ),

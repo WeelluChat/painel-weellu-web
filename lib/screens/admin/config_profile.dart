@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../models/auth.dart';
 import '../../login/provider/ProfileProvider.dart'; // Certifique-se de que o caminho está correto
@@ -105,10 +106,9 @@ class _TatatesteState extends State<Tatateste> {
                           padding: const EdgeInsets.only(top: 30.0),
                           child: Text(
                             'Profile picture',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontSize: 22,
-                              fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               height: 0,
                               letterSpacing: 0.34,
@@ -255,10 +255,9 @@ class _TatatesteState extends State<Tatateste> {
       child: Text(
         '$label',
         textAlign: TextAlign.left,
-        style: TextStyle(
+        style: GoogleFonts.poppins(
           color: Colors.white,
           fontSize: 20,
-          fontFamily: 'Poppins',
           fontWeight: FontWeight.w600,
           height: 0,
           letterSpacing: 0.34,
