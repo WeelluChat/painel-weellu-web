@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Chartmedias extends StatefulWidget {
+class ModuloProfileChart extends StatefulWidget {
   final List<int> values;
   final List<String> categories;
   final double? height;
 
-  const Chartmedias({
+  const ModuloProfileChart({
     super.key,
     this.values = const [
       1103505, 218443, 152590, 111074, 17055, 13995, 8827, 3358
@@ -20,10 +20,10 @@ class Chartmedias extends StatefulWidget {
   });
 
   @override
-  State<Chartmedias> createState() => _ChartmediasState();
+  State<ModuloProfileChart> createState() => _ModuloProfileChartState();
 }
 
-class _ChartmediasState extends State<Chartmedias> {
+class _ModuloProfileChartState extends State<ModuloProfileChart> {
   int? touchedIndex;
 
   @override
@@ -35,43 +35,55 @@ class _ChartmediasState extends State<Chartmedias> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Container(
           height: chartHeight,
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-          color: const Color.fromARGB(255, 19, 17, 17),
+          decoration: BoxDecoration(
+            color: const Color(0xFF131111),
+            // border: Border.all(
+            //   color: Colors.grey.withOpacity(0.2),
+            //   width: 1,
+            // ),
+          ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'ESTATÍSTICAS DE MÍDIA',
                 style: GoogleFonts.poppins(
-                  color: const Color.fromARGB(221, 255, 255, 255),
+                  color: Colors.white.withOpacity(0.9),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.2,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
               Expanded(
                 child: BarChart(
                   BarChartData(
-                    backgroundColor: Color.fromARGB(255, 19, 17, 17),
+                    backgroundColor: Colors.transparent,
                     alignment: BarChartAlignment.spaceEvenly,
+                    groupsSpace: 12,
                     maxY: _calculateMaxY(widget.values),
                     barTouchData: BarTouchData(
                       enabled: true,
                       touchTooltipData: BarTouchTooltipData(
+                        // tooltipBgColor: Colors.black.withOpacity(0.8),
                         tooltipRoundedRadius: 12,
                         tooltipPadding: const EdgeInsets.all(12),
-                        tooltipMargin: 12,
+                        tooltipMargin: 8,
                         fitInsideVertically: true,
                         fitInsideHorizontally: true,
-                        tooltipBorder: BorderSide(
-                          color: const Color.fromARGB(255, 73, 163, 119).withOpacity(0.8),
-                          width: 1.5,
-                        ),
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           return BarTooltipItem(
                             '${widget.categories[groupIndex]}\n',
@@ -82,12 +94,11 @@ class _ChartmediasState extends State<Chartmedias> {
                             ),
                             children: [
                               TextSpan(
-                                text:
-                                    '${_formatFullValue(widget.values[groupIndex])} itens',
+                                text: '${_formatFullValue(widget.values[groupIndex])} itens',
                                 style: GoogleFonts.poppins(
-                                  color: const Color.fromARGB(255, 75, 166, 122),
+                                  color: const Color(0xFF4BA67A),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -102,54 +113,62 @@ class _ChartmediasState extends State<Chartmedias> {
                             touchedIndex = -1;
                             return;
                           }
-                          touchedIndex =
-                              barTouchResponse.spot?.touchedBarGroupIndex;
+                          touchedIndex = barTouchResponse.spot?.touchedBarGroupIndex;
                         });
                       },
                     ),
                     titlesData: FlTitlesData(
+                      show: true,
                       leftTitles: AxisTitles(
                         sideTitles: SideTitles(
                           showTitles: true,
                           interval: _calculateInterval(widget.values),
                           getTitlesWidget: (value, meta) {
-                            return Text(
-                              _formatValue(value.toInt()),
-                              style: TextStyle(
-                                color: Colors.grey[800],
-                                fontSize: 12,
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Text(
+                                _formatValue(value.toInt()),
+                                style: GoogleFonts.poppins(
+                                  color: Colors.grey.withOpacity(0.7),
+                                  fontSize: 11,
+                                ),
                               ),
                             );
                           },
-                          reservedSize: 40,
+                          reservedSize: 42,
                         ),
                       ),
                       bottomTitles: AxisTitles(
                         sideTitles: SideTitles(
                           showTitles: true,
-                          getTitlesWidget: (double value, TitleMeta meta) {
+                          getTitlesWidget: (value, meta) {
                             final index = value.toInt();
-                            return Column(
-                              children: [
-                                Text(
-                                  _formatValue(widget.values[index]),
-                                  style: GoogleFonts.poppins(
-                                    color: const Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                            if (index >= 0 && index < widget.categories.length) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      _formatValue(widget.values[index]),
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white.withOpacity(0.9),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      widget.categories[index],
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.grey.withOpacity(0.7),
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  widget.categories[index],
-                                  style: GoogleFonts.poppins(
-                                    color: const Color.fromARGB(255, 126, 126, 126),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            );
+                              );
+                            }
+                            return const SizedBox();
                           },
                           reservedSize: 50,
                         ),
@@ -167,7 +186,7 @@ class _ChartmediasState extends State<Chartmedias> {
                       horizontalInterval: _calculateInterval(widget.values),
                       getDrawingHorizontalLine: (value) {
                         return FlLine(
-                          color: Colors.grey.withOpacity(0.3),
+                          color: Colors.grey.withOpacity(0.15),
                           strokeWidth: 1,
                         );
                       },
@@ -175,25 +194,34 @@ class _ChartmediasState extends State<Chartmedias> {
                     borderData: FlBorderData(
                       show: true,
                       border: Border.all(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: Colors.grey.withOpacity(0.2),
                         width: 1,
                       ),
                     ),
-                    barGroups: List.generate(widget.values.length, (index) {
+                    barGroups: widget.values.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final value = entry.value;
                       final isTouched = index == touchedIndex;
+                      
                       return BarChartGroupData(
                         x: index,
                         barRods: [
                           BarChartRodData(
-                            toY: widget.values[index].toDouble(),
-                            gradient: _createGradient(
-                                isTouched ? const Color.fromARGB(255, 79, 159, 122) : Colors.green),
-                            width: 80, // Diminuir o valor para reduzir o espaçamento
+                            toY: value.toDouble(),
+                            color: isTouched 
+                                ? const Color(0xFF4BA67A).withOpacity(0.9)
+                                : const Color(0xFF4BA67A).withOpacity(0.6),
+                            width: 60,
                             borderRadius: BorderRadius.circular(4),
+                            // backDrawRodData: BackgroundBarChartRodData(
+                            //   show: true,
+                            //   toY: _calculateMaxY(widget.values),
+                            //   color: Colors.grey.withOpacity(0.1),
+                            // ),
                           ),
                         ],
                       );
-                    }),
+                    }).toList(),
                   ),
                 ),
               ),
@@ -217,8 +245,10 @@ class _ChartmediasState extends State<Chartmedias> {
     );
   }
 
-  double _calculateMaxY(List<int> values) =>
-      (values.reduce((a, b) => a > b ? a : b) * 1.8);
+  double _calculateMaxY(List<int> values) {
+    final maxValue = values.reduce((a, b) => a > b ? a : b);
+    return maxValue * 1.8;
+  }
 
   double _calculateInterval(List<int> values) {
     final maxValue = values.reduce((a, b) => a > b ? a : b);
@@ -227,11 +257,4 @@ class _ChartmediasState extends State<Chartmedias> {
     if (maxValue > 10000) return 10000;
     return 1000;
   }
-
-  static LinearGradient _createGradient(Color color) => LinearGradient(
-        colors: [color.withOpacity(0.8), color, color.withOpacity(0.9)],
-        stops: const [0.0, 0.5, 1.0],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
 }

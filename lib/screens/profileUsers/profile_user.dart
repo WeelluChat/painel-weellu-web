@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:monitor_site_weellu/screens/profileUsers/modulo_User_profile.dart';
 import 'package:monitor_site_weellu/screens/profileUsers/modulo_chart_line.dart';
+import 'package:monitor_site_weellu/screens/profileUsers/modulo_profile_chart.dart';
+
 
 class ProfileUser extends StatefulWidget {
   final String userId;
@@ -65,6 +67,11 @@ class _ProfileUserState extends State<ProfileUser> {
                     ModuloChartLine(),
                   ],
                 )),
+                Container(
+                  child: Column(children: [
+                    ModuloProfileChart()
+                  ],),
+                )
               ],
             ),
           ),

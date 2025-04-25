@@ -80,7 +80,7 @@ class _ModuloUserProfileState extends State<ModuloUserProfile> {
                   padding: EdgeInsets.all(10.sp),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xff292929),
+                      color: Color.fromARGB(255, 31, 29, 29),
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
@@ -180,7 +180,7 @@ class _ModuloUserProfileState extends State<ModuloUserProfile> {
                   child: Container(
                     height: 500.sp,
                     decoration: BoxDecoration(
-                      color: Color(0xff292929),
+                      color: Color.fromARGB(255, 31, 29, 29),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Wrap(

@@ -71,7 +71,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
       direction: Axis.horizontal,
       children: [
         CardsUser(
-            CorContinerGeral: Color(0xFF292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: '0',
             MiniContainer: azulFraco,
             Icone: Icons.person,
@@ -83,7 +83,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             width: cardWidth,
             height: cardHeight),
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: online.toString(),
             MiniContainer: verdeFraco,
             Icone: Icons.person_3_sharp,
@@ -95,7 +95,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             width: cardWidth,
             height: cardHeight),
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: messages.toString(),
             MiniContainer: amareloFraco,
             Icone: Icons.sms,
@@ -107,7 +107,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             width: cardWidth,
             height: cardHeight),
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: "0",
             MiniContainer: laranjaFraco,
             Icone: Icons.group,
@@ -119,7 +119,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             width: cardWidth,
             height: cardHeight),
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: "0",
             MiniContainer: vermelhoFraco,
             Icone: Icons.campaign,
@@ -131,7 +131,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             width: cardWidth,
             height: cardHeight),
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: '0',
             MiniContainer: RosaFraco,
             Icone: Icons.language,
@@ -143,7 +143,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             width: cardWidth,
             height: cardHeight),
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: '0',
             MiniContainer: lilasFraco,
             Icone: Icons.task,
@@ -155,7 +155,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             width: cardWidth,
             height: cardHeight),
         CardsUser(
-            CorContinerGeral: Color(0xff292929),
+            CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
             Valor: '0',
             MiniContainer: roxoFraco,
             Icone: Icons.add_task,
