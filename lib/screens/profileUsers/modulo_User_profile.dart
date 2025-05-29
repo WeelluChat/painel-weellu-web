@@ -98,23 +98,30 @@ class _ModuloUserProfileState extends State<ModuloUserProfile> {
                                 },
                                 child: _containerModel(
                                     cor: Colors.white,
+                                    hoverColor: Colors.grey,
                                     icone: Icons.arrow_back_outlined),
                               ),
-                              Row(
-                                children: [
-                                  _containerModel(
-                                      cor: Color(0xff00F260),
-                                      icone: Icons.edit),
-                                  SizedBox(width: 10.sp),
-                                  _containerModel(
-                                      cor: Color(0xff00F260),
-                                      icone: Icons.lock),
-                                  SizedBox(width: 10.sp),
-                                  _containerModel(
-                                      cor: Color(0xffE42525),
-                                      icone: Icons.delete),
-                                  SizedBox(width: 10.sp),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Row(
+                                  children: [
+                                    _containerModel(
+                                        cor: Color.fromARGB(255, 63, 108, 81),
+                                        hoverColor: const Color(0xff00F260),
+                                        icone: Icons.edit),
+                                    SizedBox(width: 10.sp),
+                                    _containerModel(
+                                        cor: Color.fromARGB(255, 63, 108, 81),
+                                        hoverColor:  const Color(0xff00F260),
+                                        icone: Icons.lock),
+                                    SizedBox(width: 10.sp),
+                                    _containerModel(
+                                        cor: Color.fromARGB(255, 123, 29, 29),
+                                        hoverColor: const Color.fromARGB(255, 242, 44, 30),
+                                        icone: Icons.delete),
+                                    SizedBox(width: 10.sp),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -205,7 +212,7 @@ class _ModuloUserProfileState extends State<ModuloUserProfile> {
                             Icone: Icons.person_3_sharp,
                             ColorIcon: verde,
                             Texto: 'Dia',
-                            Texto2: "Online\nUsers",
+                            Texto2: "Groups",
                             Cor: verde,
                             CorFraca: verdeFraco,
                             width: cardWidth,
@@ -259,15 +266,34 @@ class _ModuloUserProfileState extends State<ModuloUserProfile> {
   }
 }
 
-Widget _containerModel({required Color cor, required IconData icone}) {
-  return Container(
-    height: 35.sp,
-    width: 35.sp,
-    decoration: BoxDecoration(
-      border: Border.all(color: cor),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Icon(icone, color: cor),
+Widget _containerModel({
+  required Color cor, 
+  required IconData icone,
+  Color? hoverColor,
+}) {
+  bool isHovering = false;
+  
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return MouseRegion(
+        onEnter: (_) => setState(() => isHovering = true),
+        onExit: (_) => setState(() => isHovering = false),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          height: 35.sp,
+          width: 35.sp,
+          decoration: BoxDecoration(
+            border: Border.all(color: isHovering ? (hoverColor ?? cor) : cor),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Icon(
+            icone, 
+            color: isHovering ? (hoverColor ?? cor) : cor,
+            size: 25,
+          ),
+        ),
+      );
+    },
   );
 }
 

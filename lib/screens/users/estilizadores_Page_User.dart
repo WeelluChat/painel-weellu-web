@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:monitor_site_weellu/screens/profileUsers/profile_user.dart';
+import 'package:monitor_site_weellu/screens/users/alert_Dialog.dart';
 
 Widget containerFlexHeader({required int value, required String label}) {
   return Expanded(
@@ -79,7 +80,9 @@ Widget containerActions(
               size: 22.sp,
             ),
             onPressed: () {
-              // Ação para recusar
+              showDialog(context: context, builder: (context) {
+                return AlertDialogDeleteUser();
+              },);
             },
           ),
         ],
@@ -162,3 +165,4 @@ Widget containerFlagColumn({required String countryCode, required int value}) {
     ),
   );
 }
+

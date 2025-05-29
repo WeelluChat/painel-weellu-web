@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ModuloProfileChart extends StatefulWidget {
@@ -30,6 +31,7 @@ class _ModuloProfileChartState extends State<ModuloProfileChart> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final chartHeight = widget.height ?? mediaQuery.size.height * 0.7;
+    
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -211,7 +213,7 @@ class _ModuloProfileChartState extends State<ModuloProfileChart> {
                             color: isTouched 
                                 ? const Color(0xFF4BA67A).withOpacity(0.9)
                                 : const Color(0xFF4BA67A).withOpacity(0.6),
-                            width: 60,
+                            width: 80,
                             borderRadius: BorderRadius.circular(4),
                             // backDrawRodData: BackgroundBarChartRodData(
                             //   show: true,
@@ -231,6 +233,8 @@ class _ModuloProfileChartState extends State<ModuloProfileChart> {
       ),
     );
   }
+
+
 
   String _formatValue(int value) {
     if (value >= 1000000) return '${(value / 1000000).toStringAsFixed(1)}M';

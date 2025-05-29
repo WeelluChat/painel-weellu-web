@@ -49,17 +49,16 @@ class _ModuloMapWorldState extends State<ModuloMapWorld> {
             }
           }
 
-          setState(() {
+          if (!mounted) return;
+          setState((){
             userDistribution = distribution;
-            print('Distribuição de Usuários: $userDistribution');
-          });
-        } else {
-          print('Dados da resposta não estão no formato esperado.');
-        }
-      } else {
-        print('Falha ao carregar dados: ${response.statusCode}');
+            print('Distribuição de Usuarios: $userDistribution');
+          }
+          );
+            }
       }
     } catch (e) {
+      if (!mounted) return;
       print('Erro ao buscar dados: $e');
     }
   }

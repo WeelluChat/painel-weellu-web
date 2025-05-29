@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:monitor_site_weellu/screens/users/modelsClients.dart';
 
 class ModuloCardsUsers extends StatefulWidget {
   const ModuloCardsUsers({super.key});
@@ -29,13 +31,49 @@ final Color roxo = Color.fromARGB(255, 147, 114, 208);
 final Color roxoFraco = Color.fromARGB(35, 147, 114, 208);
 
 class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
+  List<Modelsclients> filteredUsers = [];
+  List<Modelsclients> users = [];
+  int country = 0;
+  int broadcast = 0;
+  int groups = 0;
   int online = 0;
+  int usuarios = 0;
   int messages = 0;
+  int all = 0;
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  String searchQuery = "";
+  String filterOption = 'Todos';
+  String selectedCountry = 'Todos';
 
   @override
   void initState() {
     super.initState();
     fetchApiData();
+    fetchUsers();
+  }
+
+  Future<void> fetchUsers() async {
+    if (isLoading) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await http.get(
+      Uri.parse('https://api.weellu.com/api/v1/admin-panel/users?limit=1000'),
+      headers: {
+        'admin-key': 'super_password_for_admin',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        usuarios = data['data']['totalDocs'];
+      });
+    }
   }
 
   Future<void> fetchApiData() async {
@@ -52,7 +90,10 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
 
       setState(() {
         online = data['data']['userData']['online'];
+        all = data['data']['usersDevices']['android'];
         messages = data['data']['messagesCounter']['messages'];
+        groups = data['data']['roomCounter']['group'];
+        broadcast = data['data']['roomCounter']['broadcast'];
       });
     } else {
       // Lidar com erros de resposta da API
@@ -72,12 +113,12 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
       children: [
         CardsUser(
             CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
-            Valor: '0',
+            Valor: usuarios.toString(),
             MiniContainer: azulFraco,
             Icone: Icons.person,
             ColorIcon: azulFraco,
             Texto: "Ano",
-            Texto2: "Users",
+            Texto2: "Total\nUsers",
             Cor: azul,
             CorFraca: azulFraco,
             width: cardWidth,
@@ -108,24 +149,24 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             height: cardHeight),
         CardsUser(
             CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
-            Valor: "0",
+            Valor: groups.toString(),
             MiniContainer: laranjaFraco,
             Icone: Icons.group,
             ColorIcon: laranja,
             Texto: "Total",
-            Texto2: 'Groups',
+            Texto2: 'Total\nGroups',
             Cor: laranja,
             CorFraca: laranjaFraco,
             width: cardWidth,
             height: cardHeight),
         CardsUser(
             CorContinerGeral: Color.fromARGB(255, 60, 54, 54),
-            Valor: "0",
+            Valor: broadcast.toString(),
             MiniContainer: vermelhoFraco,
             Icone: Icons.campaign,
             ColorIcon: vermelho,
             Texto: "Total",
-            Texto2: 'Broadcast',
+            Texto2: 'Total\nBroadcast',
             Cor: vermelho,
             CorFraca: vermelhoFraco,
             width: cardWidth,
@@ -149,7 +190,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             Icone: Icons.task,
             ColorIcon: lilas,
             Texto: "Total",
-            Texto2: 'Project',
+            Texto2: 'Total\nProject',
             Cor: lilas,
             CorFraca: lilasFraco,
             width: cardWidth,
@@ -161,7 +202,7 @@ class _ModuloCardsUsersState extends State<ModuloCardsUsers> {
             Icone: Icons.add_task,
             ColorIcon: roxo,
             Texto: 'Total',
-            Texto2: 'Task',
+            Texto2: 'Total\nTask',
             Cor: roxo,
             CorFraca: roxoFraco,
             width: cardWidth,
@@ -308,11 +349,11 @@ Widget CardsUser(
               decoration: BoxDecoration(
                 color: CorFraca,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(width * 0.03),
+                  Radius.circular(width * 0.05),
                 ),
               ),
               height: height * 0.02,
-              width: width * 0.85,
+              width: width * 1,
             )
           ],
         ),

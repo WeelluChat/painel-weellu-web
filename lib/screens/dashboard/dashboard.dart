@@ -37,7 +37,7 @@ class _DashMasterState extends State<DashMaster> {
                     Padding(
                       padding: EdgeInsets.only(left: 15.0),
                       child: Text(
-                        'Dashboard',
+                        'DASHBOARD',
                         style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontSize: 30,

@@ -178,7 +178,7 @@ class _SideMenuState extends State<SideMenu> {
                     _handleMenuItemSelected('DashboardMaster');
                   },
                 ),
-                
+
                 _buildActionButton(
                   Icons.supervisor_account_rounded,
                   'Integration',
@@ -216,7 +216,7 @@ class _SideMenuState extends State<SideMenu> {
                   },
                 ),
                 _buildActionButton(
-                  PhosphorIcons.flag_banner_fill,
+                  PhosphorIcons.flag_banner,
                   'Adversiting',
                   scaleFactor: scaleFactor,
                   isSelected: _selectedMenuItem == 'Adversiting',
@@ -234,7 +234,7 @@ class _SideMenuState extends State<SideMenu> {
                   },
                 ),
                 _buildActionButton(
-                  FontAwesomeIcons.phoneVolume,
+                  FontAwesomeIcons.phone,
                   "Calls",
                   scaleFactor: scaleFactor,
                   isSelected: _selectedMenuItem == '',
@@ -252,7 +252,7 @@ class _SideMenuState extends State<SideMenu> {
                   },
                 ),
                 _buildActionButton(
-                  Icons.account_box_rounded,
+                  Icons.account_box_outlined,
                   'Logins',
                   scaleFactor: scaleFactor,
                   isSelected: _selectedMenuItem == 'tatateste',
@@ -338,46 +338,69 @@ class _SideMenuState extends State<SideMenu> {
     required double scaleFactor,
     required VoidCallback onPressed,
   }) {
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        color: isSelected ? Color(0xff051309) : Colors.transparent,
-        child: Padding(
-          padding: EdgeInsets.only(left: 40.sp),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(
-                icon,
-                color: label == "Logout"
-                    ? Colors.red[400]
-                    : isSelected
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : const Color.fromARGB(255, 255, 255, 255)
-                            .withOpacity(0.7),
-                size: 23.sp,
-              ),
-              Padding(
-                padding: EdgeInsets.all(7.sp),
-                child: Text(
-                  label,
-                  style: GoogleFonts.poppins(
-                    color: label == "Logout"
-                        ? Colors.red[400]
-                        : isSelected
-                            ? const Color.fromARGB(255, 255, 255, 255)
-                            : Colors.white.withOpacity(0.7),
-                    fontSize: 20.sp,
-                    fontWeight: isSelected ? FontWeight.w500 : FontWeight.w200,
-                    height: 0,
-                    letterSpacing: 1.50,
-                  ),
+    bool _isHovered = false;
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return MouseRegion(
+          onEnter: (event) {
+            setState(() {
+              _isHovered = true;
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              _isHovered = false;
+            });
+          },
+          child: InkWell(
+            onTap: onPressed,
+            child: Container(
+              color: isSelected
+                  ? Color(0xff051309)
+                  : _isHovered
+                      ? Color.fromARGB(24, 255, 255, 255)
+                      : Colors.transparent,
+              child: Padding(
+                padding: EdgeInsets.only(left: 40.sp),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      icon,
+                      color: label == "Logout"
+                          ? Colors.red[400]
+                          : (isSelected || _isHovered)
+                              ? const Color.fromARGB(255, 255, 255, 255)
+                              : const Color.fromARGB(255, 255, 255, 255)
+                                  .withOpacity(0.7),
+                      size: 23.sp,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(7.sp),
+                      child: Text(
+                        label,
+                        style: GoogleFonts.poppins(
+                          color: label == "Logout"
+                              ? Colors.red[400]
+                              : (isSelected || _isHovered)
+                                  ? const Color.fromARGB(255, 255, 255, 255)
+                                  : Colors.white.withOpacity(0.7),
+                          fontSize: 20.sp,
+                          fontWeight:
+                              isSelected ? FontWeight.w500 : FontWeight.w200,
+                          height: 0,
+                          letterSpacing: 1.50,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

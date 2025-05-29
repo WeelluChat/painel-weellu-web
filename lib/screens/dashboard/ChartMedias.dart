@@ -10,11 +10,24 @@ class Chartmedias extends StatefulWidget {
   const Chartmedias({
     super.key,
     this.values = const [
-      1103505, 218443, 152590, 111074, 17055, 13995, 8827, 3358
+      1103505,
+      218443,
+      152590,
+      111074,
+      17055,
+      13995,
+      8827,
+      3358
     ],
     this.categories = const [
-      'Textos', 'Infos', 'Imagens', 'Áudios',
-      'Arquivos', 'Apagadas', 'Vídeos', 'Locais'
+      'Textos',
+      'Informações',
+      'Imagens',
+      'Áudios',
+      'Arquivos',
+      'Apagadas',
+      'Vídeos',
+      'Localização'
     ],
     this.height,
   });
@@ -43,12 +56,13 @@ class _ChartmediasState extends State<Chartmedias> {
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
           color: const Color.fromARGB(255, 19, 17, 17),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'ESTATÍSTICAS DE MÍDIA',
                 style: GoogleFonts.poppins(
                   color: const Color.fromARGB(221, 255, 255, 255),
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.2,
                 ),
@@ -69,7 +83,8 @@ class _ChartmediasState extends State<Chartmedias> {
                         fitInsideVertically: true,
                         fitInsideHorizontally: true,
                         tooltipBorder: BorderSide(
-                          color: const Color.fromARGB(255, 73, 163, 119).withOpacity(0.8),
+                          color: const Color.fromARGB(255, 73, 163, 119)
+                              .withOpacity(0.8),
                           width: 1.5,
                         ),
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -85,7 +100,8 @@ class _ChartmediasState extends State<Chartmedias> {
                                 text:
                                     '${_formatFullValue(widget.values[groupIndex])} itens',
                                 style: GoogleFonts.poppins(
-                                  color: const Color.fromARGB(255, 75, 166, 122),
+                                  color:
+                                      const Color.fromRGBO(75, 166, 122, 1),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
                                 ),
@@ -134,7 +150,8 @@ class _ChartmediasState extends State<Chartmedias> {
                                 Text(
                                   _formatValue(widget.values[index]),
                                   style: GoogleFonts.poppins(
-                                    color: const Color.fromARGB(255, 255, 255, 255),
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -143,7 +160,8 @@ class _ChartmediasState extends State<Chartmedias> {
                                 Text(
                                   widget.categories[index],
                                   style: GoogleFonts.poppins(
-                                    color: const Color.fromARGB(255, 126, 126, 126),
+                                    color: const Color.fromARGB(
+                                        255, 126, 126, 126),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -186,9 +204,11 @@ class _ChartmediasState extends State<Chartmedias> {
                         barRods: [
                           BarChartRodData(
                             toY: widget.values[index].toDouble(),
-                            gradient: _createGradient(
-                                isTouched ? const Color.fromARGB(255, 79, 159, 122) : Colors.green),
-                            width: 80, // Diminuir o valor para reduzir o espaçamento
+                            gradient: _createGradient(isTouched
+                                ? const Color.fromARGB(255, 79, 159, 122)
+                                : const Color.fromARGB(255, 47, 105, 77)),
+                            width:
+                                80, // Diminuir o valor para reduzir o espaçamento
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ],
@@ -212,9 +232,9 @@ class _ChartmediasState extends State<Chartmedias> {
 
   String _formatFullValue(int value) {
     return value.toString().replaceAllMapped(
-      RegExp(r'\B(?=(\d{3})+(?!\d))'),
-      (Match m) => '.',
-    );
+          RegExp(r'\B(?=(\d{3})+(?!\d))'),
+          (Match m) => '.',
+        );
   }
 
   double _calculateMaxY(List<int> values) =>

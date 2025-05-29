@@ -150,12 +150,11 @@ class _UsersPagesState extends State<UsersPages> {
                         padding: EdgeInsets.only(left: 15.sp),
                         child: Text(
                           'Usuários',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Color(0xFFEAEAF0),
                             fontSize: 40.sp,
-                            fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
-                            letterSpacing: 0.67,
+                            letterSpacing: 0.67,    
                           ),
                         ),
                       ),

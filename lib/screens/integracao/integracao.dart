@@ -205,10 +205,9 @@ class Header extends StatelessWidget {
                   padding: EdgeInsets.only(left: 15.0.sp),
                   child: Text(
                     'Integração',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Color(0xFFEAEAF0),
                       fontSize: 40.sp,
-                      fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.67,
                     ),
@@ -236,6 +235,7 @@ class StatusAndSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
@@ -251,7 +251,7 @@ class StatusAndSearchBar extends StatelessWidget {
             child: DropdownButton<String>(
               value: selectedStatus,
               onChanged: onStatusChanged,
-              items: ['Todos', 'approved', 'pending', 'rejected']
+              items: ['Todos', 'Approved', 'Pending', 'Rejected']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -259,10 +259,9 @@ class StatusAndSearchBar extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       value,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Color(0xFF292929),
                         fontSize: 20.sp,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -276,7 +275,7 @@ class StatusAndSearchBar extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(5),
           height: 40.sp,
-          width: 200.sp,
+          width: 170.sp,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             border: Border.all(color: const Color(0xff979797)),
@@ -290,10 +289,9 @@ class StatusAndSearchBar extends StatelessWidget {
                   TextStyle(color: Colors.white, fontSize: 20.sp, height: 1.4),
               prefixIcon: Icon(Icons.search, color: Colors.white),
             ),
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               color: Colors.white,
               fontSize: 20.sp,
-              fontFamily: 'Poppins',
               fontWeight: FontWeight.w300,
               // height: 1.2.sp,
             ),
@@ -397,7 +395,7 @@ class IntegrationRow extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: GoogleFonts.montserrat(
-              color: color ?? const Color.fromARGB(255, 255, 255, 255),
+              color: color ?? Colors.white,
               fontSize: 17.sp,
               fontWeight: FontWeight.w400,
             ),
