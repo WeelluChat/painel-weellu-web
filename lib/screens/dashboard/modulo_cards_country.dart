@@ -14,6 +14,9 @@ class ModuloCardsCountry extends StatefulWidget {
 class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
   Map<String, int> userDistribution = {};
   int totalUsers = 0;
+  bool isLoading = true;
+  String? errorMessage;
+  http.Client? _httpClient;
 
   final Map<String, Color> stateColors = {
     'brAC': Colors.red,
@@ -48,72 +51,93 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    _httpClient = http.Client();
+    _fetchUserData();
   }
 
-  Future<void> fetchUserData() async {
-    final url = 'https://api.weellu.com/api/v1/admin-panel/users';
-    int page = 1;
-    final int limit = 3000;
-    bool hasMoreData = true;
+  @override
+  void dispose() {
+    _httpClient?.close(); // Cancela todas as requisições pendentes
+    super.dispose();
+  }
 
-    while (hasMoreData) {
-      try {
-        final response = await http.get(
+  Future<void> _fetchUserData() async {
+    try {
+      final url = 'https://api.weellu.com/api/v1/admin-panel/users';
+      int page = 1;
+      const int limit = 3000;
+      bool hasMoreData = true;
+
+      while (hasMoreData && mounted) {
+        final response = await _httpClient!.get(
           Uri.parse('$url?page=$page&limit=$limit'),
           headers: {
             'admin-key': 'super_password_for_admin',
           },
         );
 
+        if (!mounted) return;
+
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
 
-          if (data != null &&
-              data['data'] != null &&
-              data['data']['docs'] != null) {
+          if (data != null && data['data'] != null && data['data']['docs'] != null) {
             final List<dynamic> users = data['data']['docs'];
 
-            if (users.isNotEmpty) {
-              Map<String, int> distribution = {};
+            if (users.isEmpty) {
+              hasMoreData = false;
+              continue;
+            }
 
-              for (var user in users) {
-                final countryId = user['countryId'];
-                final address = user['address'];
+            final Map<String, int> distribution = {};
 
-                if (countryId != null &&
-                    countryId['code'] == 'BR' &&
-                    address != null) {
-                  String region = address['region'] ?? 'Desconhecido';
-                  if (region.isNotEmpty) {
-                    String stateKey = 'br${region.toUpperCase()}';
-                    distribution[stateKey] = (distribution[stateKey] ?? 0) + 1;
-                  }
+            for (var user in users) {
+              final countryId = user['countryId'];
+              final address = user['address'];
+
+              if (countryId != null && countryId['code'] == 'BR' && address != null) {
+                String region = address['region']?.toString().toUpperCase() ?? 'Desconhecido';
+                if (region.isNotEmpty && region != 'DESCONHECIDO') {
+                  String stateKey = 'br$region';
+                  distribution[stateKey] = (distribution[stateKey] ?? 0) + 1;
                 }
               }
-
-              setState(() {
-                userDistribution =
-                    _mergeDistributions(userDistribution, distribution);
-                totalUsers = userDistribution.values
-                    .fold(0, (sum, count) => sum + count);
-              });
-
-              page++;
-            } else {
-              hasMoreData = false;
             }
+
+            if (mounted) {
+              setState(() {
+                userDistribution = _mergeDistributions(userDistribution, distribution);
+                totalUsers = userDistribution.values.fold(0, (sum, count) => sum + count);
+                isLoading = false;
+              });
+            }
+
+            page++;
           } else {
-            print('Dados da resposta não estão no formato esperado.');
             hasMoreData = false;
+            if (mounted) {
+              setState(() {
+                errorMessage = 'Dados da resposta não estão no formato esperado.';
+                isLoading = false;
+              });
+            }
           }
         } else {
-          print('Falha ao carregar dados: ${response.statusCode}');
           hasMoreData = false;
+          if (mounted) {
+            setState(() {
+              errorMessage = 'Falha ao carregar dados: ${response.statusCode}';
+              isLoading = false;
+            });
+          }
         }
-      } catch (e) {
-        print('Erro ao buscar dados: $e');
-        hasMoreData = false;
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          errorMessage = 'Erro ao buscar dados: ${e.toString()}';
+          isLoading = false;
+        });
       }
     }
   }
@@ -129,13 +153,25 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> states = userDistribution.keys.toList();
-    int midIndex = (states.length / 2).ceil();
-    List<String> firstHalf = states.sublist(0, midIndex);
-    List<String> secondHalf = states.sublist(midIndex);
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (errorMessage != null) {
+      return Center(child: Text(errorMessage!));
+    }
+
+    if (userDistribution.isEmpty) {
+      return const Center(child: Text('Nenhum dado disponível'));
+    }
+
+    final states = userDistribution.keys.toList();
+    final midIndex = (states.length / 2).ceil();
+    final firstHalf = states.sublist(0, midIndex);
+    final secondHalf = states.sublist(midIndex);
 
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       height: 500,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +183,7 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
               child: Container(
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 19, 17, 17),
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     bottomLeft: Radius.circular(10),
                   ),
@@ -187,8 +223,7 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
                       brTO: _getMapColors()['brTO'],
                     ).toMap(),
                     callback: (id, name, tapdetails) {
-                      final int userCount =
-                          userDistribution[id.toUpperCase()] ?? 0;
+                      final int userCount = userDistribution[id.toUpperCase()] ?? 0;
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -217,7 +252,7 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
               child: Container(
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 19, 17, 17),
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
@@ -233,9 +268,8 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
                             Expanded(
                               child: ListView(
                                 children: firstHalf.map((region) {
-                                  int count = userDistribution[region] ?? 0;
-                                  double percentage =
-                                      (count / totalUsers) * 100;
+                                  final count = userDistribution[region] ?? 0;
+                                  final percentage = (count / totalUsers) * 100;
                                   return _Estados(
                                     cor: _getColorForRegion(region),
                                     texto:
@@ -244,13 +278,12 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
                                 }).toList(),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: ListView(
                                 children: secondHalf.map((region) {
-                                  int count = userDistribution[region] ?? 0;
-                                  double percentage =
-                                      (count / totalUsers) * 100;
+                                  final count = userDistribution[region] ?? 0;
+                                  final percentage = (count / totalUsers) * 100;
                                   return _Estados(
                                     cor: _getColorForRegion(region),
                                     texto:
@@ -264,6 +297,7 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
                       ),
                       Container(
                         width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
                           'Número Total de Usuários: $totalUsers',
                           style: GoogleFonts.poppins(
@@ -289,11 +323,10 @@ class _ModuloCardsCountryState extends State<ModuloCardsCountry> {
   }
 
   Map<String, Color> _getMapColors() {
-    Map<String, Color> mapColors = {};
+    final Map<String, Color> mapColors = {};
     userDistribution.forEach((region, userCount) {
-      double opacity = (userCount / totalUsers) * 0.8 + 0.2;
-      mapColors[region] =
-          _getColorForRegion(region).withOpacity(opacity.clamp(0.2, 1.0));
+      final opacity = (userCount / totalUsers) * 0.8 + 0.2;
+      mapColors[region] = _getColorForRegion(region).withOpacity(opacity.clamp(0.2, 1.0));
     });
     return mapColors;
   }
@@ -303,19 +336,19 @@ class _Estados extends StatelessWidget {
   final Color cor;
   final String texto;
 
-  _Estados({required this.cor, required this.texto});
+  const _Estados({required this.cor, required this.texto});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 2),
+      margin: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
           Container(
             width: 18,
             height: 18,
             color: cor,
-            margin: EdgeInsets.only(right: 8),
+            margin: const EdgeInsets.only(right: 8),
           ),
           Text(
             texto,

@@ -81,7 +81,7 @@ Widget containerActions(
             ),
             onPressed: () {
               showDialog(context: context, builder: (context) {
-                return AlertDialogDeleteUser();
+                return AlertDialogDeleteUser(userId: userId,);
               },);
             },
           ),
